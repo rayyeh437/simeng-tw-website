@@ -17,12 +17,52 @@ const CATEGORIES = [
 ]
 
 const WHY_CHOOSE_SIMENG = [
-  { icon: '⚡', title: '優質商品', description: '精選全球優質商品，品質保證' },
-  { icon: '🚚', title: '快速配送', description: '全台灣 3-5 天送達，免運費' },
-  { icon: '🔒', title: '安全支付', description: '多種支付方式，安全有保障' },
-  { icon: '💬', title: '24/7 客服', description: '隨時準備幫助您解決問題' },
-  { icon: '🎁', title: '會員優惠', description: '專屬會員折扣和積分獎勵' },
-  { icon: '🔗', title: '無縫整合', description: 'App 和網站數據完全同步' },
+  { icon: '⚡', title: '積極效率', description: '快速出貨、服務周到' },
+  { icon: '💳', title: '安心購物', description: '貨源保證、安全交易' },
+  { icon: '🛡️', title: '預購保障', description: '優惠價格、保證發貨' },
+]
+
+const CONTACT_CHANNELS = [
+  {
+    id: 'line',
+    title: '官方 LINE 客服',
+    subtitle: '點擊加入好友諮詢',
+    icon: '💬',
+    bgColor: '#06C755',
+    url: 'https://lin.ee/WAZ74tV',
+  },
+  {
+    id: 'email',
+    title: '電子郵件',
+    subtitle: 'simengco@gmail.com',
+    icon: '📧',
+    bgColor: '#7C3AED',
+    url: 'mailto:simengco@gmail.com',
+  },
+  {
+    id: 'instagram',
+    title: 'Instagram',
+    subtitle: '@simengco',
+    icon: '📷',
+    bgColor: '#E1306C',
+    url: 'https://www.instagram.com/simengco?igsh=cmFmbm83cnoyd2lo',
+  },
+  {
+    id: 'facebook',
+    title: 'Facebook',
+    subtitle: 'SIMENG',
+    icon: '👍',
+    bgColor: '#1877F2',
+    url: 'https://www.facebook.com/profile.php?id=61590990701683',
+  },
+  {
+    id: 'threads',
+    title: 'Threads',
+    subtitle: '@simengco',
+    icon: '💬',
+    bgColor: '#000000',
+    url: 'https://www.threads.com/@simengco?igshid=NTc4MTIwNjQ2YQ==',
+  },
 ]
 
 export default function HomePage() {
@@ -210,7 +250,7 @@ export default function HomePage() {
                     </p>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <span style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#7C3AED' }}>
-                        ¥1,299
+                        NT$1,299
                       </span>
                       <button
                         style={{
@@ -235,90 +275,107 @@ export default function HomePage() {
 
         {/* 為什麼選擇 Simeng */}
         <div style={{ marginBottom: '3rem', background: '#F8F8F8', padding: '3rem 2rem', borderRadius: '0.75rem' }}>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '2rem', textAlign: 'center', color: '#1A1A1A' }}>
-            為什麼選擇喜萌？
-          </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '2rem', gap: '0.5rem' }}>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#1A1A1A', margin: 0 }}>
+              為什麼選擇
+            </h2>
+            <img src="/logo-full.png" alt="喜萌" style={{ height: '40px', objectFit: 'contain' }} />
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#1A1A1A', margin: 0 }}>
+              ？
+            </h2>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
             {WHY_CHOOSE_SIMENG.map((item, index) => (
-              <div key={index} style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>{item.icon}</div>
-                <h3 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '0.5rem', color: '#1A1A1A' }}>
-                  {item.title}
-                </h3>
-                <p style={{ color: '#6B7280', fontSize: '0.875rem' }}>
-                  {item.description}
-                </p>
+              <div key={index} style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
+                <div
+                  style={{
+                    width: '48px',
+                    height: '48px',
+                    background: '#7C3AED',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '1.5rem',
+                    flexShrink: 0,
+                  }}
+                >
+                  {item.icon}
+                </div>
+                <div>
+                  <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '0.25rem', color: '#1A1A1A' }}>
+                    {item.title}
+                  </h3>
+                  <p style={{ color: '#6B7280', fontSize: '0.875rem', margin: 0 }}>
+                    {item.description}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* 聯絡我們 */}
-        <div
-          style={{
-            marginBottom: '3rem',
-            background: 'linear-gradient(135deg, #7C3AED 0%, #EC4899 100%)',
-            color: 'white',
-            padding: '3rem 2rem',
-            borderRadius: '0.75rem',
-          }}
-        >
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem', textAlign: 'center' }}>
+        {/* 聯絡我們 - 完全使用 App 的內容 */}
+        <div style={{ marginBottom: '3rem', borderTop: '1px solid #E5E7EB', paddingTop: '2rem' }}>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '2rem', color: '#1A1A1A' }}>
             聯絡我們
           </h2>
-          <p style={{ textAlign: 'center', marginBottom: '2rem', opacity: 0.9 }}>
-            有任何問題或建議？我們很樂意聽到您的意見
-          </p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem', marginBottom: '2rem' }}>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>📧</div>
-              <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '0.5rem' }}>電子郵件</h3>
-              <a href="mailto:support@simeng.tw" style={{ color: 'white', textDecoration: 'underline', fontSize: '0.875rem' }}>
-                support@simeng.tw
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            {CONTACT_CHANNELS.map((channel) => (
+              <a
+                key={channel.id}
+                href={channel.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'flex',
+                  gap: '1rem',
+                  alignItems: 'center',
+                  padding: '1rem',
+                  background: '#F8F8F8',
+                  borderRadius: '0.75rem',
+                  border: '1px solid #E5E7EB',
+                  textDecoration: 'none',
+                  transition: 'all 0.3s ease',
+                  cursor: 'pointer',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)'
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)'
+                  e.currentTarget.style.boxShadow = 'none'
+                }}
+              >
+                <div
+                  style={{
+                    width: '48px',
+                    height: '48px',
+                    background: channel.bgColor,
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '1.5rem',
+                    flexShrink: 0,
+                  }}
+                >
+                  {channel.icon}
+                </div>
+                <div style={{ flex: 1 }}>
+                  <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '0.25rem', color: '#1A1A1A', margin: 0 }}>
+                    {channel.title}
+                  </h3>
+                  <p style={{ color: '#7C3AED', fontSize: '0.875rem', margin: 0 }}>
+                    {channel.subtitle}
+                  </p>
+                </div>
               </a>
-            </div>
-
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>📞</div>
-              <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '0.5rem' }}>電話</h3>
-              <a href="tel:+886-2-1234-5678" style={{ color: 'white', textDecoration: 'underline', fontSize: '0.875rem' }}>
-                +886-2-1234-5678
-              </a>
-            </div>
-
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>📱</div>
-              <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '0.5rem' }}>社群媒體</h3>
-              <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
-                <a href="https://www.instagram.com/simengco" target="_blank" rel="noopener noreferrer" style={{ color: 'white', textDecoration: 'none', fontSize: '1.5rem' }}>
-                  📷
-                </a>
-                <a href="https://www.facebook.com/profile.php?id=61590990701683" target="_blank" rel="noopener noreferrer" style={{ color: 'white', textDecoration: 'none', fontSize: '1.5rem' }}>
-                  👍
-                </a>
-                <a href="https://www.threads.com/@simengco" target="_blank" rel="noopener noreferrer" style={{ color: 'white', textDecoration: 'none', fontSize: '1.5rem' }}>
-                  💬
-                </a>
-              </div>
-            </div>
+            ))}
           </div>
-
-          {/* 聯絡表單 */}
-          <form style={{ maxWidth: '600px', margin: '0 auto' }}>
-            <div style={{ marginBottom: '1rem' }}>
-              <input type="text" placeholder="您的姓名" style={{ width: '100%', padding: '0.75rem', borderRadius: '0.375rem', border: 'none', fontSize: '0.875rem' }} />
-            </div>
-            <div style={{ marginBottom: '1rem' }}>
-              <input type="email" placeholder="您的郵箱" style={{ width: '100%', padding: '0.75rem', borderRadius: '0.375rem', border: 'none', fontSize: '0.875rem' }} />
-            </div>
-            <div style={{ marginBottom: '1rem' }}>
-              <textarea placeholder="您的訊息" rows={4} style={{ width: '100%', padding: '0.75rem', borderRadius: '0.375rem', border: 'none', fontSize: '0.875rem', fontFamily: 'inherit' }} />
-            </div>
-            <button type="submit" style={{ width: '100%', padding: '0.75rem', background: 'white', color: '#7C3AED', border: 'none', borderRadius: '0.375rem', fontWeight: '600', cursor: 'pointer' }}>
-              發送訊息
-            </button>
-          </form>
         </div>
 
         {/* 下載應用 */}
