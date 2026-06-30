@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import { MainLayout } from '@/components/layout'
 
@@ -70,7 +70,6 @@ const SHARE_OPTIONS = [
 
 export default function ProductDetailPage() {
   const params = useParams()
-  const router = useRouter()
   const productId = params.id as string
   const [isFavorited, setIsFavorited] = useState(false)
 
@@ -109,240 +108,287 @@ export default function ProductDetailPage() {
 
   return (
     <MainLayout>
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        {/* 麵包屑 */}
-        <div style={{ marginBottom: '2rem', display: 'flex', gap: '0.5rem', color: '#6B7280', fontSize: '0.875rem' }}>
-          <Link href="/" style={{ color: '#7C3AED', textDecoration: 'none' }}>
-            首頁
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem' }}>
+        {/* Header */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: '1rem 0',
+            marginBottom: '2rem',
+            borderBottom: '1px solid #E5E7EB',
+          }}
+        >
+          <Link href="/products">
+            <button
+              style={{
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                fontSize: '1.5rem',
+              }}
+            >
+              ←
+            </button>
           </Link>
-          <span>/</span>
-          <Link href="/products" style={{ color: '#7C3AED', textDecoration: 'none' }}>
-            商品
-          </Link>
-          <span>/</span>
-          <span>{product.name}</span>
+          <h1 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#1A1A1A', flex: 1, marginLeft: '1rem', margin: 0 }}>
+            商品詳情
+          </h1>
+          <button
+            onClick={() => setIsFavorited(!isFavorited)}
+            style={{
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              fontSize: '1.5rem',
+            }}
+          >
+            {isFavorited ? '❤️' : '🤍'}
+          </button>
         </div>
 
-        {/* 商品詳情 */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem', marginBottom: '3rem' }}>
-          {/* 商品圖片 */}
+        {/* Product Image */}
+        <div
+          style={{
+            background: '#F8F8F8',
+            padding: '2rem',
+            textAlign: 'center',
+            marginBottom: '2rem',
+            borderRadius: '0.75rem',
+          }}
+        >
           <div
             style={{
-              background: '#F8F8F8',
+              width: '192px',
+              height: '192px',
+              background: '#E5E7EB',
               borderRadius: '0.5rem',
-              height: '400px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: '5rem',
-              border: '1px solid #E5E7EB',
+              fontSize: '4rem',
+              margin: '0 auto',
             }}
           >
             📦
           </div>
+        </div>
 
-          {/* 商品信息 */}
-          <div>
-            {/* 分類 */}
-            <div style={{ marginBottom: '1rem' }}>
-              <span
-                style={{
-                  display: 'inline-block',
-                  background: '#7C3AED',
-                  color: 'white',
-                  padding: '0.25rem 0.75rem',
-                  borderRadius: '9999px',
-                  fontSize: '0.75rem',
-                  fontWeight: '600',
-                }}
-              >
-                {product.category}
-              </span>
+        {/* Product Info */}
+        <div style={{ paddingBottom: '2rem' }}>
+          {/* Category Badge */}
+          <div style={{ marginBottom: '1rem' }}>
+            <span
+              style={{
+                display: 'inline-block',
+                background: '#7C3AED',
+                color: 'white',
+                padding: '0.25rem 0.75rem',
+                borderRadius: '9999px',
+                fontSize: '0.75rem',
+                fontWeight: '600',
+              }}
+            >
+              {product.category}
+            </span>
+          </div>
+
+          {/* Product Name */}
+          <h2 style={{ fontSize: '2rem', fontWeight: 'bold', color: '#1A1A1A', marginBottom: '1rem', margin: 0 }}>
+            {product.name}
+          </h2>
+
+          {/* Rating */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
+            <div style={{ display: 'flex', gap: '0.25rem' }}>
+              {[...Array(5)].map((_, i) => (
+                <span key={i} style={{ fontSize: '1rem' }}>
+                  {i < Math.floor(product.rating) ? '⭐' : '☆'}
+                </span>
+              ))}
             </div>
+            <span style={{ fontSize: '0.875rem', color: '#6B7280' }}>
+              {product.rating} ({product.reviews} 評論)
+            </span>
+          </div>
 
-            {/* 商品名稱 */}
-            <h1 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '1rem', color: '#1A1A1A' }}>
-              {product.name}
-            </h1>
+          {/* Price */}
+          <h3 style={{ fontSize: '2rem', fontWeight: 'bold', color: '#7C3AED', marginBottom: '1.5rem', margin: 0 }}>
+            NT${product.price.toLocaleString()}
+          </h3>
 
-            {/* 描述 */}
-            <p style={{ color: '#6B7280', fontSize: '1rem', marginBottom: '2rem', lineHeight: '1.6' }}>
+          {/* Description */}
+          <div style={{ marginBottom: '2rem' }}>
+            <h4 style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1A1A1A', marginBottom: '0.5rem', margin: 0 }}>
+              商品描述
+            </h4>
+            <p style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: '1.5', margin: 0 }}>
               {product.description}
             </p>
+          </div>
 
-            {/* 價格 */}
-            <div style={{ marginBottom: '2rem', padding: '1rem', background: '#F8F8F8', borderRadius: '0.5rem' }}>
-              <p style={{ color: '#6B7280', fontSize: '0.875rem', marginBottom: '0.5rem' }}>價格</p>
-              <p style={{ fontSize: '2rem', fontWeight: 'bold', color: '#7C3AED' }}>
-                ¥{(product.price / 100).toFixed(2)}
-              </p>
+          {/* Details */}
+          <div style={{ marginBottom: '2rem' }}>
+            <h4 style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1A1A1A', marginBottom: '1rem', margin: 0 }}>
+              商品特色
+            </h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              {product.details.map((detail: string, index: number) => (
+                <div key={index} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem' }}>
+                  <span style={{ fontSize: '1rem', marginTop: '2px', flexShrink: 0 }}>✓</span>
+                  <span style={{ fontSize: '0.875rem', color: '#6B7280' }}>{detail}</span>
+                </div>
+              ))}
             </div>
+          </div>
 
-            {/* 庫存 */}
-            <div style={{ marginBottom: '2rem' }}>
-              <p style={{ color: '#6B7280', fontSize: '0.875rem', marginBottom: '0.5rem' }}>庫存</p>
-              <p style={{ fontSize: '1.125rem', fontWeight: '500', color: '#1A1A1A' }}>
-                {product.stock > 0 ? `${product.stock} 件` : '缺貨'}
-              </p>
-            </div>
+          {/* Action Buttons */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '2rem' }}>
+            <a
+              href={product.shopUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'block',
+                padding: '0.75rem',
+                background: '#7C3AED',
+                color: 'white',
+                border: 'none',
+                borderRadius: '0.5rem',
+                textAlign: 'center',
+                fontWeight: '600',
+                textDecoration: 'none',
+                cursor: 'pointer',
+              }}
+            >
+              前往購買
+            </a>
+            <button
+              style={{
+                padding: '0.75rem',
+                background: 'white',
+                color: '#7C3AED',
+                border: '2px solid #7C3AED',
+                borderRadius: '0.5rem',
+                fontWeight: '600',
+                cursor: 'pointer',
+              }}
+            >
+              加入預購購物車
+            </button>
+          </div>
 
-            {/* 數量選擇 */}
-            <div style={{ marginBottom: '2rem' }}>
-              <p style={{ color: '#6B7280', fontSize: '0.875rem', marginBottom: '0.5rem' }}>數量</p>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          {/* Social Share Section */}
+          <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem' }}>
+            <h4 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#1A1A1A', marginBottom: '1rem', margin: 0 }}>
+              分享商品
+            </h4>
+            <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center' }}>
+              {SHARE_OPTIONS.map((option) => (
                 <button
-                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  key={option.id}
                   style={{
-                    width: '40px',
-                    height: '40px',
+                    flex: '1',
+                    maxWidth: '30%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    padding: '0.75rem',
                     border: '1px solid #E5E7EB',
-                    borderRadius: '0.375rem',
-                    background: '#ffffff',
+                    borderRadius: '0.5rem',
+                    background: 'white',
                     cursor: 'pointer',
-                    fontSize: '1.125rem',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = '#F8F8F8'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = 'white'
                   }}
                 >
-                  −
+                  <div
+                    style={{
+                      width: '48px',
+                      height: '48px',
+                      background: option.color,
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '1.5rem',
+                    }}
+                  >
+                    {option.icon}
+                  </div>
+                  <span style={{ fontSize: '0.75rem', fontWeight: '600', color: '#1A1A1A' }}>
+                    {option.name}
+                  </span>
                 </button>
-                <input
-                  type="number"
-                  value={quantity}
-                  onChange={(e) => setQuantity(Math.max(1, Number(e.target.value)))}
-                  style={{
-                    width: '60px',
-                    height: '40px',
-                    border: '1px solid #E5E7EB',
-                    borderRadius: '0.375rem',
-                    textAlign: 'center',
-                    fontSize: '1rem',
-                  }}
-                />
-                <button
-                  onClick={() => setQuantity(quantity + 1)}
-                  style={{
-                    width: '40px',
-                    height: '40px',
-                    border: '1px solid #E5E7EB',
-                    borderRadius: '0.375rem',
-                    background: '#ffffff',
-                    cursor: 'pointer',
-                    fontSize: '1.125rem',
-                  }}
-                >
-                  +
-                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Related Products */}
+          {relatedProducts.length > 0 && (
+            <div style={{ marginTop: '3rem', borderTop: '1px solid #E5E7EB', paddingTop: '2rem' }}>
+              <h4 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#1A1A1A', marginBottom: '1.5rem', margin: 0 }}>
+                相關商品
+              </h4>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
+                {relatedProducts.map((relatedProduct: any) => (
+                  <Link key={relatedProduct.id} href={`/products/${relatedProduct.id}`}>
+                    <div
+                      style={{
+                        background: '#F8F8F8',
+                        borderRadius: '0.5rem',
+                        overflow: 'hidden',
+                        border: '1px solid #E5E7EB',
+                        cursor: 'pointer',
+                        transition: 'all 0.3s ease',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = 'translateY(-4px)'
+                        e.currentTarget.style.boxShadow = '0 10px 25px rgba(0,0,0,0.1)'
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'translateY(0)'
+                        e.currentTarget.style.boxShadow = 'none'
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: '100%',
+                          paddingBottom: '100%',
+                          position: 'relative',
+                          background: '#E5E7EB',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontSize: '2rem',
+                        }}
+                      >
+                        📦
+                      </div>
+                      <div style={{ padding: '0.75rem' }}>
+                        <h5 style={{ fontSize: '0.75rem', fontWeight: '600', marginBottom: '0.25rem', color: '#1A1A1A', margin: 0 }}>
+                          {relatedProduct.name}
+                        </h5>
+                        <p style={{ fontSize: '0.75rem', color: '#6B7280', marginBottom: '0.5rem', margin: 0 }}>
+                          {relatedProduct.category}
+                        </p>
+                        <span style={{ fontSize: '1rem', fontWeight: 'bold', color: '#7C3AED' }}>
+                          NT${relatedProduct.price}
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
               </div>
             </div>
-
-            {/* 加入購物車按鈕 */}
-            <div style={{ display: 'flex', gap: '1rem' }}>
-              <button
-                onClick={handleAddToCart}
-                disabled={product.stock === 0}
-                style={{
-                  flex: 1,
-                  padding: '1rem',
-                  background: product.stock === 0 ? '#9CA3AF' : '#7C3AED',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '0.375rem',
-                  fontSize: '1rem',
-                  fontWeight: '600',
-                  cursor: product.stock === 0 ? 'not-allowed' : 'pointer',
-                  transition: 'all 0.3s ease',
-                }}
-                onMouseEnter={(e) => {
-                  if (product.stock > 0) {
-                    e.currentTarget.style.background = '#EC4899'
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (product.stock > 0) {
-                    e.currentTarget.style.background = '#7C3AED'
-                  }
-                }}
-              >
-                {addedToCart ? '✓ 已加入購物車' : '加入購物車'}
-              </button>
-              <button
-                style={{
-                  padding: '1rem 2rem',
-                  background: '#F8F8F8',
-                  color: '#7C3AED',
-                  border: '2px solid #7C3AED',
-                  borderRadius: '0.375rem',
-                  fontSize: '1rem',
-                  fontWeight: '600',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = '#F3E8FF'
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = '#F8F8F8'
-                }}
-              >
-                ♡ 收藏
-              </button>
-            </div>
-
-            {/* 狀態提示 */}
-            {product.stock === 0 && (
-              <p style={{ marginTop: '1rem', color: '#EF4444', fontSize: '0.875rem' }}>
-                ⚠️ 此商品暫時缺貨
-              </p>
-            )}
-          </div>
+          )}
         </div>
-
-        {/* 商品詳細信息 */}
-        <div style={{ background: '#F8F8F8', padding: '2rem', borderRadius: '0.5rem', marginBottom: '3rem' }}>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem', color: '#1A1A1A' }}>
-            商品詳細信息
-          </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
-            <div>
-              <p style={{ color: '#6B7280', fontSize: '0.875rem', marginBottom: '0.25rem' }}>商品 ID</p>
-              <p style={{ color: '#1A1A1A', fontWeight: '500' }}>{product.id}</p>
-            </div>
-            <div>
-              <p style={{ color: '#6B7280', fontSize: '0.875rem', marginBottom: '0.25rem' }}>狀態</p>
-              <p style={{ color: '#1A1A1A', fontWeight: '500' }}>
-                {product.status === 'published' ? '已上架' : '草稿'}
-              </p>
-            </div>
-            <div>
-              <p style={{ color: '#6B7280', fontSize: '0.875rem', marginBottom: '0.25rem' }}>建立時間</p>
-              <p style={{ color: '#1A1A1A', fontWeight: '500' }}>
-                {new Date(product.createdAt).toLocaleDateString('zh-TW')}
-              </p>
-            </div>
-            <div>
-              <p style={{ color: '#6B7280', fontSize: '0.875rem', marginBottom: '0.25rem' }}>更新時間</p>
-              <p style={{ color: '#1A1A1A', fontWeight: '500' }}>
-                {new Date(product.updatedAt).toLocaleDateString('zh-TW')}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* 返回按鈕 */}
-        <Link href="/products">
-          <button
-            style={{
-              padding: '0.75rem 1.5rem',
-              background: '#F8F8F8',
-              color: '#7C3AED',
-              border: '1px solid #E5E7EB',
-              borderRadius: '0.375rem',
-              cursor: 'pointer',
-              fontSize: '1rem',
-            }}
-          >
-            ← 返回商品列表
-          </button>
-        </Link>
       </div>
     </MainLayout>
   )
