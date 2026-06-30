@@ -144,11 +144,21 @@ export default function ProductDetailPage() {
           {/* 商品信息 */}
           <div>
             {/* 分類 */}
-            {category && (
-              <p style={{ color: '#6B7280', fontSize: '0.875rem', marginBottom: '0.5rem' }}>
-                分類：<span style={{ color: '#7C3AED', fontWeight: '500' }}>{category.name}</span>
-              </p>
-            )}
+            <div style={{ marginBottom: '1rem' }}>
+              <span
+                style={{
+                  display: 'inline-block',
+                  background: '#7C3AED',
+                  color: 'white',
+                  padding: '0.25rem 0.75rem',
+                  borderRadius: '9999px',
+                  fontSize: '0.75rem',
+                  fontWeight: '600',
+                }}
+              >
+                {product.category}
+              </span>
+            </div>
 
             {/* 商品名稱 */}
             <h1 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '1rem', color: '#1A1A1A' }}>
