@@ -42,9 +42,7 @@ export function MainLayout({ children, showHeader = true, showFooter = true }: L
             }}
           >
             <Link href="/" style={{ textDecoration: 'none' }}>
-              <h1 style={{ color: '#7C3AED', margin: 0, fontSize: '1.5rem', fontWeight: 'bold' }}>
-                喜萌
-              </h1>
+              <img src="/logo-full.png" alt="喜萌 Logo" style={{ height: '40px', objectFit: 'contain' }} />
             </Link>
 
             <nav style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
