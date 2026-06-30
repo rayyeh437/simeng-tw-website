@@ -78,10 +78,7 @@ export default function HomePage() {
 
   return (
     <MainLayout>
-      {/* Logo Header */}
-      <div style={{ background: '#ffffff', padding: '1.5rem', borderBottom: '1px solid #E5E7EB', textAlign: 'center' }}>
-        <img src="/logo-full.png" alt="喜萌 Logo" style={{ height: '70px', objectFit: 'contain' }} />
-      </div>
+
 
       {/* 搜尋欄 */}
       <div style={{ background: '#F8F8F8', padding: '1rem', position: 'sticky', top: 0, zIndex: 100 }}>
