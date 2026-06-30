@@ -20,8 +20,7 @@ export default function RootLayout({
       <body>
         <Providers>
           <header style={{ background: '#f5f5f5', padding: '20px', textAlign: 'center' }}>
-            <h1>{appName}</h1>
-            <p>您的購物好幫手</p>
+            <img src="/logo-full.png" alt="喜萌 Logo" style={{ height: '60px', objectFit: 'contain' }} />
           </header>
           <main style={{ minHeight: 'calc(100vh - 200px)', padding: '20px' }}>
             {children}
