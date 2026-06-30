@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Providers } from '@/lib/providers'
 import './globals.css'
 
 const appName = process.env.NEXT_PUBLIC_APP_NAME || '喜萌'
@@ -17,16 +18,18 @@ export default function RootLayout({
   return (
     <html lang="zh-TW">
       <body>
-        <header style={{ background: '#f5f5f5', padding: '20px', textAlign: 'center' }}>
-          <h1>{appName}</h1>
-          <p>您的購物好幫手</p>
-        </header>
-        <main style={{ minHeight: 'calc(100vh - 200px)', padding: '20px' }}>
-          {children}
-        </main>
-        <footer style={{ background: '#f5f5f5', padding: '20px', textAlign: 'center', marginTop: '40px' }}>
-          <p>&copy; 2024 {appName}. 版權所有。</p>
-        </footer>
+        <Providers>
+          <header style={{ background: '#f5f5f5', padding: '20px', textAlign: 'center' }}>
+            <h1>{appName}</h1>
+            <p>您的購物好幫手</p>
+          </header>
+          <main style={{ minHeight: 'calc(100vh - 200px)', padding: '20px' }}>
+            {children}
+          </main>
+          <footer style={{ background: '#f5f5f5', padding: '20px', textAlign: 'center', marginTop: '40px' }}>
+            <p>&copy; 2024 {appName}. 版權所有。</p>
+          </footer>
+        </Providers>
       </body>
     </html>
   )
