@@ -1,10 +1,12 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
 import { getCategories } from '@/lib/api'
+import { ProtectedRoute } from '@/components/protected-route'
 import type { Category } from '@/lib/types'
 
-export default function CategoriesAdminPage() {
+function CategoriesContent() {
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -14,7 +16,6 @@ export default function CategoriesAdminPage() {
       try {
         setLoading(true)
         const data = await getCategories()
-        // tRPC 返回的格式是 { result: { data: [...] } }
         const categoryList = Array.isArray(data) ? data : (data as any)?.result?.data || [];
         setCategories(categoryList)
       } catch (err) {
@@ -45,7 +46,23 @@ export default function CategoriesAdminPage() {
 
   return (
     <div style={{ padding: '20px' }}>
-      <h1>分類管理</h1>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+        <h1>分類管理</h1>
+        <Link href="/admin">
+          <button
+            style={{
+              background: '#6c757d',
+              color: 'white',
+              padding: '8px 16px',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+            }}
+          >
+            返回首頁
+          </button>
+        </Link>
+      </div>
       
       <div style={{ marginBottom: '20px' }}>
         <button
@@ -130,5 +147,13 @@ export default function CategoriesAdminPage() {
         </div>
       )}
     </div>
+  )
+}
+
+export default function CategoriesAdminPage() {
+  return (
+    <ProtectedRoute requiredRole="admin">
+      <CategoriesContent />
+    </ProtectedRoute>
   )
 }

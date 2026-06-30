@@ -1,11 +1,45 @@
 'use client'
 
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useAuth } from '@/hooks/use-auth'
+import { ProtectedRoute } from '@/components/protected-route'
 
-export default function AdminPage() {
+function AdminPageContent() {
+  const router = useRouter()
+  const { user, logout } = useAuth()
+
+  const handleLogout = async () => {
+    await logout()
+    router.push('/auth/login')
+  }
+
   return (
     <div style={{ padding: '20px' }}>
-      <h1>後台管理系統</h1>
+      {/* 頂部用戶菜單 */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px', paddingBottom: '20px', borderBottom: '1px solid #eee' }}>
+        <h1>後台管理系統</h1>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+          <span style={{ color: '#666' }}>
+            歡迎，<strong>{user?.name || user?.email}</strong>
+          </span>
+          <button
+            onClick={handleLogout}
+            style={{
+              background: '#dc3545',
+              color: 'white',
+              padding: '8px 16px',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontSize: '14px',
+            }}
+          >
+            登出
+          </button>
+        </div>
+      </div>
+
       <p style={{ color: '#666', marginBottom: '30px' }}>
         歡迎使用喜萌後台管理系統。您可以在此管理商品、分類、訂單等信息。
       </p>
@@ -155,13 +189,21 @@ export default function AdminPage() {
             </p>
           </div>
           <div>
-            <p style={{ color: '#666', fontSize: '14px', marginBottom: '5px' }}>語言</p>
+            <p style={{ color: '#666', fontSize: '14px', marginBottom: '5px' }}>用戶角色</p>
             <p style={{ color: '#333', fontWeight: 'bold' }}>
-              {process.env.NEXT_PUBLIC_LANGUAGE || 'zh-TW'}
+              {user?.role === 'admin' ? '管理員' : '普通用戶'}
             </p>
           </div>
         </div>
       </div>
     </div>
+  )
+}
+
+export default function AdminPage() {
+  return (
+    <ProtectedRoute requiredRole="admin">
+      <AdminPageContent />
+    </ProtectedRoute>
   )
 }

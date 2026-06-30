@@ -1,10 +1,12 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
 import { getCategories, searchProducts } from '@/lib/api'
+import { ProtectedRoute } from '@/components/protected-route'
 import type { Product, Category } from '@/lib/types'
 
-export default function ProductsAdminPage() {
+function ProductsContent() {
   const [products, setProducts] = useState<Product[]>([])
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
@@ -51,7 +53,23 @@ export default function ProductsAdminPage() {
 
   return (
     <div style={{ padding: '20px' }}>
-      <h1>商品管理</h1>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+        <h1>商品管理</h1>
+        <Link href="/admin">
+          <button
+            style={{
+              background: '#6c757d',
+              color: 'white',
+              padding: '8px 16px',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+            }}
+          >
+            返回首頁
+          </button>
+        </Link>
+      </div>
       
       <div style={{ marginBottom: '20px' }}>
         <button
@@ -141,5 +159,13 @@ export default function ProductsAdminPage() {
         </div>
       )}
     </div>
+  )
+}
+
+export default function ProductsAdminPage() {
+  return (
+    <ProtectedRoute requiredRole="admin">
+      <ProductsContent />
+    </ProtectedRoute>
   )
 }
