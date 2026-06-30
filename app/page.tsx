@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { MainLayout } from '@/components/layout'
 
 export default function Home() {
   const appName = process.env.NEXT_PUBLIC_APP_NAME || '喜萌'
@@ -23,243 +24,241 @@ export default function Home() {
   }, [apiUrl])
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-      {/* Navigation */}
-      <nav style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        alignItems: 'center',
-        padding: '20px 0',
-        borderBottom: '1px solid #eee',
-        marginBottom: '40px'
-      }}>
-        <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#333' }}>
-          {appName}
-        </h1>
-        <div style={{ display: 'flex', gap: '20px' }}>
-          <Link href="#features" style={{ color: '#666', textDecoration: 'none' }}>
-            功能
-          </Link>
-          <Link href="#categories" style={{ color: '#666', textDecoration: 'none' }}>
-            分類
-          </Link>
-          <Link href="#download" style={{ color: '#666', textDecoration: 'none' }}>
-            下載
-          </Link>
-        </div>
-      </nav>
-
-      {/* Hero Section */}
-      <section style={{ textAlign: 'center', marginBottom: '60px', paddingTop: '40px' }}>
-        <h2 style={{ fontSize: '48px', marginBottom: '20px', color: '#333', fontWeight: 'bold' }}>
-          歡迎來到 {appName}
-        </h2>
-        <p style={{ fontSize: '18px', color: '#666', marginBottom: '30px', lineHeight: '1.6' }}>
-          發現您喜愛的商品，享受最佳購物體驗。
-          <br />
-          {appName} 是一款內嵌賣貨便賣場的行動應用程式，提供品牌首頁、商品瀏覽、購物車及訂單管理等功能。
-        </p>
-        <button
-          onClick={() => {
-            const appStoreUrl = 'https://apps.apple.com'
-            const playStoreUrl = 'https://play.google.com'
-            // 在實際應用中，這裡應該鏈接到真實的應用商店
-            alert('應用即將上線！')
-          }}
+    <MainLayout showHeader={false} showFooter={true}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        {/* 英雄區 */}
+        <section
           style={{
-            background: '#007bff',
+            background: 'linear-gradient(135deg, #7C3AED 0%, #EC4899 100%)',
+            borderRadius: '1rem',
+            padding: '4rem 2rem',
+            textAlign: 'center',
             color: 'white',
-            padding: '12px 30px',
-            fontSize: '16px',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer',
-            fontWeight: 'bold',
-            transition: 'background 0.3s ease',
+            marginBottom: '3rem',
           }}
-          onMouseOver={(e) => (e.currentTarget.style.background = '#0056b3')}
-          onMouseOut={(e) => (e.currentTarget.style.background = '#007bff')}
         >
-          開始購物
-        </button>
-      </section>
-
-      {/* Features Section */}
-      <section id="features" style={{ marginBottom: '60px' }}>
-        <h3 style={{ fontSize: '32px', marginBottom: '30px', textAlign: 'center', color: '#333', fontWeight: 'bold' }}>
-          為什麼選擇 {appName}？
-        </h3>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '30px' }}>
-          {[
-            { title: '優質商品', description: '精選優質商品，品質保證' },
-            { title: '快速配送', description: '快速配送，送達您家' },
-            { title: '安全支付', description: '安全支付方式，保護您的信息' },
-            { title: '24/7 客服', description: '隨時幫助您解決問題' },
-            { title: '會員優惠', description: '專享會員折扣和優惠券' },
-            { title: '無縫整合', description: '與賣貨便平台完美整合' },
-          ].map((feature, index) => (
-            <div
-              key={index}
+          <h1 style={{ fontSize: '3rem', fontWeight: 'bold', marginBottom: '1rem' }}>
+            ⚡ 夢開始的地方 ⚡
+          </h1>
+          <p style={{ fontSize: '1.25rem', marginBottom: '2rem', opacity: 0.9 }}>
+            發現最新的限定版卡牌、收藏品和獨家商品
+          </p>
+          <Link href="/products">
+            <button
               style={{
-                padding: '20px',
-                background: '#f9f9f9',
-                borderRadius: '8px',
-                textAlign: 'center',
-                border: '1px solid #eee',
-                transition: 'all 0.3s ease',
-                cursor: 'pointer',
-              }}
-              onMouseOver={(e) => {
-                e.currentTarget.style.background = '#f0f0f0'
-                e.currentTarget.style.transform = 'translateY(-5px)'
-                e.currentTarget.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)'
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.background = '#f9f9f9'
-                e.currentTarget.style.transform = 'translateY(0)'
-                e.currentTarget.style.boxShadow = 'none'
-              }}
-            >
-              <h4 style={{ fontSize: '20px', marginBottom: '10px', color: '#333', fontWeight: 'bold' }}>
-                {feature.title}
-              </h4>
-              <p style={{ color: '#666', lineHeight: '1.6' }}>
-                {feature.description}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Categories Section */}
-      <section id="categories" style={{ marginBottom: '60px' }}>
-        <h3 style={{ fontSize: '32px', marginBottom: '30px', textAlign: 'center', color: '#333', fontWeight: 'bold' }}>
-          商品分類
-        </h3>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>
-          {['電子產品', '服裝', '家居用品', '美妝', '食品飲料', '運動'].map((category, index) => (
-            <div
-              key={index}
-              style={{
-                padding: '30px',
-                background: '#f0f0f0',
-                borderRadius: '8px',
-                textAlign: 'center',
+                padding: '1rem 2rem',
+                background: 'white',
+                color: '#7C3AED',
+                border: 'none',
+                borderRadius: '0.5rem',
+                fontSize: '1.125rem',
+                fontWeight: '600',
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
-                fontWeight: 'bold',
-                color: '#333',
               }}
-              onMouseOver={(e) => {
-                e.currentTarget.style.background = '#007bff'
-                e.currentTarget.style.color = 'white'
+              onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'scale(1.05)'
               }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.background = '#f0f0f0'
-                e.currentTarget.style.color = '#333'
+              onMouseLeave={(e) => {
                 e.currentTarget.style.transform = 'scale(1)'
               }}
             >
-              <h4 style={{ fontSize: '18px' }}>{category}</h4>
-            </div>
-          ))}
-        </div>
-      </section>
+              立即購物
+            </button>
+          </Link>
+        </section>
 
-      {/* CTA Section */}
-      <section id="download" style={{ textAlign: 'center', marginBottom: '60px', padding: '40px', background: '#f5f5f5', borderRadius: '8px' }}>
-        <h3 style={{ fontSize: '28px', marginBottom: '20px', color: '#333', fontWeight: 'bold' }}>
-          下載我們的應用
-        </h3>
-        <p style={{ fontSize: '16px', color: '#666', marginBottom: '30px', lineHeight: '1.6' }}>
-          在 iOS 和 Android 上下載 {appName} 應用，隨時隨地購物
-        </p>
-        <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <button
-            onClick={() => alert('App Store 連結即將推出')}
+        {/* 功能區 */}
+        <section style={{ marginBottom: '3rem' }}>
+          <h2 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '2rem', color: '#1A1A1A' }}>
+            為什麼選擇喜萌？
+          </h2>
+          <div
             style={{
-              background: '#333',
-              color: 'white',
-              padding: '12px 30px',
-              fontSize: '16px',
-              border: 'none',
-              borderRadius: '5px',
-              cursor: 'pointer',
-              fontWeight: 'bold',
-              transition: 'background 0.3s ease',
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+              gap: '1.5rem',
             }}
-            onMouseOver={(e) => (e.currentTarget.style.background = '#555')}
-            onMouseOut={(e) => (e.currentTarget.style.background = '#333')}
           >
-            App Store
-          </button>
-          <button
-            onClick={() => alert('Google Play 連結即將推出')}
-            style={{
-              background: '#333',
-              color: 'white',
-              padding: '12px 30px',
-              fontSize: '16px',
-              border: 'none',
-              borderRadius: '5px',
-              cursor: 'pointer',
-              fontWeight: 'bold',
-              transition: 'background 0.3s ease',
-            }}
-            onMouseOver={(e) => (e.currentTarget.style.background = '#555')}
-            onMouseOut={(e) => (e.currentTarget.style.background = '#333')}
-          >
-            Google Play
-          </button>
-        </div>
-      </section>
+            {[
+              { icon: '✨', title: '優質商品', desc: '精選全球限定版商品' },
+              { icon: '🚀', title: '快速配送', desc: '24小時內發貨' },
+              { icon: '🔒', title: '安全支付', desc: '多種支付方式' },
+              { icon: '📞', title: '24/7 客服', desc: '隨時為您服務' },
+              { icon: '🎁', title: '會員優惠', desc: '獨家會員折扣' },
+              { icon: '🔗', title: '無縫整合', desc: 'App 和網站同步' },
+            ].map((feature, index) => (
+              <div
+                key={index}
+                style={{
+                  background: '#F8F8F8',
+                  padding: '2rem',
+                  borderRadius: '0.75rem',
+                  border: '1px solid #E5E7EB',
+                  textAlign: 'center',
+                  transition: 'all 0.3s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.boxShadow = '0 10px 25px rgba(0,0,0,0.1)'
+                  e.currentTarget.style.transform = 'translateY(-5px)'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.boxShadow = 'none'
+                  e.currentTarget.style.transform = 'translateY(0)'
+                }}
+              >
+                <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>{feature.icon}</div>
+                <h3 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '0.5rem', color: '#1A1A1A' }}>
+                  {feature.title}
+                </h3>
+                <p style={{ color: '#6B7280', fontSize: '0.875rem' }}>{feature.desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
 
-      {/* Info Section */}
-      <section style={{ marginBottom: '40px', padding: '20px', background: '#f9f9f9', borderRadius: '8px' }}>
-        <h4 style={{ color: '#333', marginBottom: '10px', fontWeight: 'bold' }}>系統信息</h4>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px' }}>
-          <div>
-            <p style={{ color: '#666', fontSize: '14px', marginBottom: '5px' }}>
-              應用名稱：<code style={{ background: '#eee', padding: '2px 6px', borderRadius: '3px' }}>{appName}</code>
-            </p>
+        {/* 分類區 */}
+        <section style={{ marginBottom: '3rem' }}>
+          <h2 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '2rem', color: '#1A1A1A' }}>
+            熱門分類
+          </h2>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+              gap: '1rem',
+            }}
+          >
+            {[
+              { name: '電子產品', emoji: '📱' },
+              { name: '服裝', emoji: '👕' },
+              { name: '家居用品', emoji: '🏠' },
+              { name: '美妝', emoji: '💄' },
+              { name: '食品飲料', emoji: '🍔' },
+              { name: '運動', emoji: '⚽' },
+            ].map((category, index) => (
+              <Link key={index} href="/products">
+                <div
+                  style={{
+                    background: '#F8F8F8',
+                    padding: '2rem',
+                    borderRadius: '0.75rem',
+                    textAlign: 'center',
+                    cursor: 'pointer',
+                    border: '1px solid #E5E7EB',
+                    transition: 'all 0.3s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = '#F3E8FF'
+                    e.currentTarget.style.borderColor = '#7C3AED'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = '#F8F8F8'
+                    e.currentTarget.style.borderColor = '#E5E7EB'
+                  }}
+                >
+                  <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>{category.emoji}</div>
+                  <p style={{ fontWeight: '500', color: '#1A1A1A' }}>{category.name}</p>
+                </div>
+              </Link>
+            ))}
           </div>
-          <div>
-            <p style={{ color: '#666', fontSize: '14px', marginBottom: '5px' }}>
-              API 伺服器：<code style={{ background: '#eee', padding: '2px 6px', borderRadius: '3px' }}>{apiUrl}</code>
-            </p>
+        </section>
+
+        {/* 下載區 */}
+        <section
+          style={{
+            background: '#F8F8F8',
+            padding: '3rem 2rem',
+            borderRadius: '1rem',
+            textAlign: 'center',
+            marginBottom: '3rem',
+          }}
+        >
+          <h2 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '1rem', color: '#1A1A1A' }}>
+            下載喜萌 App
+          </h2>
+          <p style={{ fontSize: '1rem', color: '#6B7280', marginBottom: '2rem' }}>
+            隨時隨地購物，享受更好的體驗
+          </p>
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <button
+              style={{
+                padding: '1rem 2rem',
+                background: '#1A1A1A',
+                color: 'white',
+                border: 'none',
+                borderRadius: '0.5rem',
+                fontSize: '1rem',
+                fontWeight: '600',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#333'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = '#1A1A1A'
+              }}
+            >
+              📱 App Store
+            </button>
+            <button
+              style={{
+                padding: '1rem 2rem',
+                background: '#7C3AED',
+                color: 'white',
+                border: 'none',
+                borderRadius: '0.5rem',
+                fontSize: '1rem',
+                fontWeight: '600',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#EC4899'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = '#7C3AED'
+              }}
+            >
+              🤖 Google Play
+            </button>
           </div>
-          <div>
-            <p style={{ color: '#666', fontSize: '14px' }}>
-              API 狀態：
-              <span style={{
+        </section>
+
+        {/* API 狀態 */}
+        <section
+          style={{
+            background: '#F8F8F8',
+            padding: '1.5rem',
+            borderRadius: '0.75rem',
+            border: '1px solid #E5E7EB',
+            fontSize: '0.875rem',
+            color: '#6B7280',
+          }}
+        >
+          <p style={{ marginBottom: '0.5rem' }}>
+            <strong>API 伺服器狀態：</strong>{' '}
+            <span
+              style={{
                 display: 'inline-block',
-                marginLeft: '5px',
-                padding: '2px 8px',
-                borderRadius: '3px',
-                background: apiStatus === 'connected' ? '#d4edda' : apiStatus === 'error' ? '#f8d7da' : '#e2e3e5',
-                color: apiStatus === 'connected' ? '#155724' : apiStatus === 'error' ? '#721c24' : '#383d41',
-                fontSize: '12px',
-                fontWeight: 'bold'
-              }}>
-                {apiStatus === 'loading' ? '檢查中...' : apiStatus === 'connected' ? '✓ 已連接' : '✗ 未連接'}
-              </span>
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer style={{ 
-        textAlign: 'center', 
-        padding: '20px', 
-        borderTop: '1px solid #eee',
-        color: '#666',
-        fontSize: '14px',
-        marginTop: '40px'
-      }}>
-        <p>© 2024 {appName}. 版權所有。</p>
-      </footer>
-    </div>
+                padding: '0.25rem 0.75rem',
+                borderRadius: '9999px',
+                background: apiStatus === 'connected' ? '#D1FAE5' : apiStatus === 'error' ? '#FEE2E2' : '#E5E7EB',
+                color: apiStatus === 'connected' ? '#065F46' : apiStatus === 'error' ? '#7F1D1D' : '#374151',
+                fontSize: '0.75rem',
+                fontWeight: '600',
+              }}
+            >
+              {apiStatus === 'loading' ? '檢查中...' : apiStatus === 'connected' ? '● 正常運行' : '● 連接失敗'}
+            </span>
+          </p>
+          <p>
+            <strong>API 端點：</strong> {apiUrl}
+          </p>
+        </section>
+      </div>
+    </MainLayout>
   )
 }
