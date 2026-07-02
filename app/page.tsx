@@ -286,7 +286,7 @@ export default function HomePage() {
 
           {/* 聯絡我們 */}
           <div style={{ background: '#F8F8F8', padding: '3rem 2rem', borderRadius: '0.75rem' }}>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '3rem', color: '#1A1A1A', margin: 0 }}>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '3rem', color: '#1A1A1A' }}>
               聯絡我們
             </h2>
 
