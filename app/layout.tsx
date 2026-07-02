@@ -25,9 +25,7 @@ export default function RootLayout({
           <main style={{ minHeight: 'calc(100vh - 200px)', padding: '20px' }}>
             {children}
           </main>
-          <footer style={{ background: '#f5f5f5', padding: '20px', textAlign: 'center', marginTop: '40px' }}>
-            <p>&copy; 2024 {appName}. 版權所有。</p>
-          </footer>
+
         </Providers>
       </body>
     </html>
