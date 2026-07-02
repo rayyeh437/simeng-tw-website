@@ -355,12 +355,12 @@ export default function HomePage() {
           <p style={{ color: '#6B7280', marginBottom: '2rem' }}>
             在 iOS 和 Android 上享受完整的購物體驗
           </p>
-          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '1rem', alignItems: 'center' }}>
-            <a href="https://play.google.com" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', display: 'inline-block' }}>
-              <img src="/app-store-google-play-badge.jpg" alt="Get it on Google Play" style={{ width: '280px', objectFit: 'contain' }} />
-            </a>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
             <a href="https://apps.apple.com" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', display: 'inline-block' }}>
-              <img src="/app-store-google-play-badge.jpg" alt="Download on the App Store" style={{ width: '280px', objectFit: 'contain' }} />
+              <img src="/app-store-badge.png" alt="Download on the App Store" style={{ height: '60px', objectFit: 'contain' }} />
+            </a>
+            <a href="https://play.google.com" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', display: 'inline-block' }}>
+              <img src="/google-play-badge.png" alt="Get it on Google Play" style={{ height: '60px', objectFit: 'contain' }} />
             </a>
           </div>
         </div>
