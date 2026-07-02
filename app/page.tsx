@@ -319,7 +319,7 @@ export default function HomePage() {
             聯絡我們
           </h2>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
             {CONTACT_CHANNELS.map((channel) => (
               <a
                 key={channel.id}
@@ -378,7 +378,7 @@ export default function HomePage() {
         {/* 下載應用 */}
         <div style={{ marginBottom: '3rem', textAlign: 'center' }}>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1.5rem', color: '#1A1A1A' }}>
-            立即下載應用
+            立即下載APP
           </h2>
           <p style={{ color: '#6B7280', marginBottom: '2rem' }}>
             在 iOS 和 Android 上享受完整的購物體驗
