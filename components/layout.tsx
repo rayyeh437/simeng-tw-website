@@ -39,11 +39,40 @@ export function MainLayout({ children, showHeader = true, showFooter = true }: L
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
+              gap: '2rem',
             }}
           >
             <Link href="/" style={{ textDecoration: 'none' }}>
               <img src="/logo-full.png" alt="喜萌 Logo" style={{ height: '40px', objectFit: 'contain' }} />
             </Link>
+
+            {/* 搜尋欄 */}
+            <div style={{ display: 'flex', gap: '0.75rem', flex: 1, maxWidth: '400px' }}>
+              <input
+                type="text"
+                placeholder="搜尋商品..."
+                style={{
+                  flex: 1,
+                  padding: '0.5rem 1rem',
+                  border: '1px solid #E5E7EB',
+                  borderRadius: '0.375rem',
+                  fontSize: '0.875rem',
+                }}
+              />
+              <button
+                style={{
+                  padding: '0.5rem 1rem',
+                  background: '#7C3AED',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '0.375rem',
+                  cursor: 'pointer',
+                  fontWeight: '600',
+                }}
+              >
+                搜尋
+              </button>
+            </div>
 
             <nav style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
               <Link href="/" style={{ color: '#1A1A1A', textDecoration: 'none' }}>
@@ -109,7 +138,7 @@ export function MainLayout({ children, showHeader = true, showFooter = true }: L
               color: '#6B7280',
             }}
           >
-            <p>&copy; 2024 喜萌. 版權所有。</p>
+            <p>&copy; 2026 喜萌SIMENG. 版權所有。</p>
             <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'center', gap: '2rem' }}>
               <Link href="/privacy" style={{ color: '#7C3AED', textDecoration: 'none' }}>
                 隱私政策

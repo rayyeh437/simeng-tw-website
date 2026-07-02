@@ -80,37 +80,6 @@ export default function HomePage() {
     <MainLayout>
 
 
-      {/* 搜尋欄 */}
-      <div style={{ background: '#F8F8F8', padding: '1rem', position: 'sticky', top: 0, zIndex: 100 }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ display: 'flex', gap: '0.75rem' }}>
-            <input
-              type="text"
-              placeholder="搜尋商品..."
-              style={{
-                flex: 1,
-                padding: '0.75rem 1rem',
-                border: '1px solid #E5E7EB',
-                borderRadius: '0.375rem',
-                fontSize: '0.875rem',
-              }}
-            />
-            <button
-              style={{
-                padding: '0.75rem 1.5rem',
-                background: '#7C3AED',
-                color: 'white',
-                border: 'none',
-                borderRadius: '0.375rem',
-                cursor: 'pointer',
-                fontWeight: '600',
-              }}
-            >
-              搜尋
-            </button>
-          </div>
-        </div>
-      </div>
 
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
         {/* 標語 */}
@@ -135,7 +104,7 @@ export default function HomePage() {
             style={{
               position: 'relative',
               width: '100%',
-              paddingBottom: '60%',
+              paddingBottom: '40%',
               background: '#E5E7EB',
               borderRadius: '0.75rem',
               overflow: 'hidden',
@@ -270,57 +239,59 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* 為什麼選擇 Simeng */}
-        <div style={{ marginBottom: '3rem', background: '#F8F8F8', padding: '3rem 2rem', borderRadius: '0.75rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '2rem', gap: '0.5rem' }}>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#1A1A1A', margin: 0 }}>
-              為什麼選擇
-            </h2>
-            <img src="/logo-full.png" alt="喜萌" style={{ height: '40px', objectFit: 'contain' }} />
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#1A1A1A', margin: 0 }}>
-              ？
-            </h2>
+        {/* 為什麼選擇 Simeng 和聯絡我們 - 並排 */}
+        <div style={{ marginBottom: '3rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+          {/* 為什麼選擇 Simeng */}
+          <div style={{ background: '#F8F8F8', padding: '3rem 2rem', borderRadius: '0.75rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '2rem', gap: '0.5rem' }}>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#1A1A1A', margin: 0 }}>
+                為什麼選擇
+              </h2>
+              <img src="/logo-full.png" alt="喜萌" style={{ height: '40px', objectFit: 'contain' }} />
+              <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#1A1A1A', margin: 0 }}>
+                ？
+              </h2>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+              {WHY_CHOOSE_SIMENG.map((item, index) => (
+                <div key={index} style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
+                  <div
+                    style={{
+                      width: '48px',
+                      height: '48px',
+                      background: '#7C3AED',
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '1.5rem',
+                      flexShrink: 0,
+                    }}
+                  >
+                    {item.icon}
+                  </div>
+                  <div>
+                    <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '0.25rem', color: '#1A1A1A' }}>
+                      {item.title}
+                    </h3>
+                    <p style={{ color: '#6B7280', fontSize: '0.875rem', margin: 0 }}>
+                      {item.description}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-            {WHY_CHOOSE_SIMENG.map((item, index) => (
-              <div key={index} style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
-                <div
-                  style={{
-                    width: '48px',
-                    height: '48px',
-                    background: '#7C3AED',
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '1.5rem',
-                    flexShrink: 0,
-                  }}
-                >
-                  {item.icon}
-                </div>
-                <div>
-                  <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '0.25rem', color: '#1A1A1A' }}>
-                    {item.title}
-                  </h3>
-                  <p style={{ color: '#6B7280', fontSize: '0.875rem', margin: 0 }}>
-                    {item.description}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+          {/* 聯絡我們 */}
+          <div>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '2rem', color: '#1A1A1A' }}>
+              聯絡我們
+            </h2>
 
-        {/* 聯絡我們 - 完全使用 App 的內容 */}
-        <div style={{ marginBottom: '3rem', borderTop: '1px solid #E5E7EB', paddingTop: '2rem' }}>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '2rem', color: '#1A1A1A' }}>
-            聯絡我們
-          </h2>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
-            {CONTACT_CHANNELS.map((channel) => (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+              {CONTACT_CHANNELS.map((channel) => (
               <a
                 key={channel.id}
                 href={channel.url}
@@ -371,7 +342,8 @@ export default function HomePage() {
                   </p>
                 </div>
               </a>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
 
