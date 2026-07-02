@@ -290,7 +290,7 @@ export default function HomePage() {
               聯絡我們
             </h2>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               {CONTACT_CHANNELS.map((channel) => (
               <a
                 key={channel.id}
