@@ -19,13 +19,9 @@ export default function RootLayout({
     <html lang="zh-TW">
       <body>
         <Providers>
-          <header style={{ background: '#f5f5f5', padding: '20px', textAlign: 'center' }}>
-            <img src="/logo-full.png" alt="喜萌 Logo" style={{ height: '60px', objectFit: 'contain' }} />
-          </header>
-          <main style={{ minHeight: 'calc(100vh - 200px)', padding: '20px' }}>
+          <main>
             {children}
           </main>
-
         </Providers>
       </body>
     </html>
