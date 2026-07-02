@@ -243,7 +243,7 @@ export default function HomePage() {
         <div style={{ marginBottom: '3rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
           {/* 為什麼選擇 Simeng */}
           <div style={{ background: '#F8F8F8', padding: '3rem 2rem', borderRadius: '0.75rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem', gap: '0.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '3rem', gap: '0.5rem' }}>
               <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#1A1A1A', margin: 0 }}>
                 為什麼選擇
               </h2>
@@ -286,7 +286,7 @@ export default function HomePage() {
 
           {/* 聯絡我們 */}
           <div style={{ background: '#F8F8F8', padding: '3rem 2rem', borderRadius: '0.75rem' }}>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1.5rem', color: '#1A1A1A', margin: 0 }}>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '3rem', color: '#1A1A1A', margin: 0 }}>
               聯絡我們
             </h2>
 
