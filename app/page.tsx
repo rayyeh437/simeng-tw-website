@@ -355,12 +355,12 @@ export default function HomePage() {
           <p style={{ color: '#6B7280', marginBottom: '2rem' }}>
             在 iOS 和 Android 上享受完整的購物體驗
           </p>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-            <a href="https://apps.apple.com" target="_blank" rel="noopener noreferrer" style={{ padding: '1rem 2rem', background: '#000000', color: 'white', borderRadius: '0.5rem', textDecoration: 'none', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '0.75rem' }}>
-              🍎 App Store
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
+            <a href="https://apps.apple.com" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', display: 'inline-block' }}>
+              <img src="/app-store-badge.png" alt="Download on the App Store" style={{ height: '50px', objectFit: 'contain' }} />
             </a>
-            <a href="https://play.google.com" target="_blank" rel="noopener noreferrer" style={{ padding: '1rem 2rem', background: '#3DDC84', color: 'white', borderRadius: '0.5rem', textDecoration: 'none', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '0.75rem' }}>
-              🤖 Google Play
+            <a href="https://play.google.com" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', display: 'inline-block' }}>
+              <img src="/google-play-badge.jpg" alt="Get it on Google Play" style={{ height: '50px', objectFit: 'contain' }} />
             </a>
           </div>
         </div>
