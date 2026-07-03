@@ -5,418 +5,435 @@ import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { MainLayout } from '@/components/layout'
 import { useAuth } from '@/hooks/use-auth'
+import { trpc } from '@/lib/trpc'
+
+type OrderStatus = 'pending' | 'confirmed' | 'shipped' | 'delivered' | 'cancelled'
+type PaymentStatus = 'awaiting_payment' | 'payment_submitted' | 'payment_verified' | 'payment_rejected'
 
 interface OrderItem {
   id: number
-  productName: string
+  productId: number
   quantity: number
   price: number
+  productName: string | null
+  productImage: string | null
 }
 
 interface Order {
   id: number
+  userId: number
   orderNumber: string
-  status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled'
-  totalPrice: number
+  totalAmount: number
+  transferAmount: number | null
+  status: OrderStatus
+  paymentStatus: PaymentStatus | null
+  paymentMethod: string | null
+  bankLastFiveDigits: string | null
+  paymentTime: string | null
+  shippingAddress: string | null
+  notes: string | null
   createdAt: string
   updatedAt: string
   items: OrderItem[]
-  shippingAddress: string
-  trackingNumber?: string
-  estimatedDelivery?: string
+}
+
+const getStatusLabel = (status: OrderStatus): string => {
+  const labels: Record<OrderStatus, string> = {
+    pending: '待確認',
+    confirmed: '已確認',
+    shipped: '已出貨',
+    delivered: '已完成',
+    cancelled: '已取消',
+  }
+  return labels[status]
+}
+
+const getStatusColor = (status: OrderStatus): string => {
+  const colorMap: Record<OrderStatus, string> = {
+    pending: '#f59e0b',
+    confirmed: '#3b82f6',
+    shipped: '#3b82f6',
+    delivered: '#10b981',
+    cancelled: '#ef4444',
+  }
+  return colorMap[status]
+}
+
+const getPaymentStatusLabel = (status: PaymentStatus | null): string => {
+  if (!status) return '未知'
+  const labels: Record<PaymentStatus, string> = {
+    awaiting_payment: '待匯款',
+    payment_submitted: '已回傳匯款資訊',
+    payment_verified: '訂單已正式成立',
+    payment_rejected: '匯款未通過',
+  }
+  return labels[status]
+}
+
+const getPaymentStatusColor = (status: PaymentStatus | null): string => {
+  if (!status) return '#9ca3af'
+  const colorMap: Record<PaymentStatus, string> = {
+    awaiting_payment: '#f59e0b',
+    payment_submitted: '#3b82f6',
+    payment_verified: '#10b981',
+    payment_rejected: '#ef4444',
+  }
+  return colorMap[status]
+}
+
+const getTimelineSteps = (status: OrderStatus): Array<{ label: string; completed: boolean }> => {
+  const steps = [
+    { label: '訂單已下單', completed: true },
+    { label: '訂單已確認', completed: ['confirmed', 'shipped', 'delivered'].includes(status) },
+    { label: '商品已出貨', completed: ['shipped', 'delivered'].includes(status) },
+    { label: '配送中', completed: false },
+    { label: '預計送達', completed: status === 'delivered' },
+  ]
+  return steps
 }
 
 export default function OrderDetailPage() {
   const params = useParams()
   const router = useRouter()
-  const { isAuthenticated, isLoading } = useAuth()
+  const { isAuthenticated, isLoading: authLoading } = useAuth()
   const orderId = params.id as string
 
-  const [order, setOrder] = useState<Order | null>(null)
-  const [loading, setLoading] = useState(true)
-
+  // 重定向未登入用戶
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      router.push('/auth/login')
+    if (!authLoading && !isAuthenticated) {
+      router.push('/user-login')
     }
-  }, [isAuthenticated, isLoading, router])
+  }, [isAuthenticated, authLoading, router])
 
-  useEffect(() => {
-    // 模擬載入訂單詳情
-    const mockOrder: Order = {
-      id: Number(orderId),
-      orderNumber: `ORD-2024-${String(orderId).padStart(3, '0')}`,
-      status: 'shipped',
-      totalPrice: 259800,
-      createdAt: '2024-06-15',
-      updatedAt: '2024-06-20',
-      items: [
-        {
-          id: 1,
-          productName: '限定版精靈寶可夢卡牌盒',
-          quantity: 2,
-          price: 129900,
-        },
-      ],
-      shippingAddress: '台灣 台北市 信義區 信義路 123 號',
-      trackingNumber: 'TW123456789',
-      estimatedDelivery: '2024-06-25',
+  // 獲取訂單詳情
+  const { data: order, isLoading, error } = trpc.orders.get.useQuery(
+    { orderId: Number(orderId) },
+    {
+      enabled: isAuthenticated && !authLoading && !!orderId,
     }
-    setOrder(mockOrder)
-    setLoading(false)
-  }, [orderId])
+  ) as any
 
-  const statusLabels: Record<string, string> = {
-    pending: '待處理',
-    processing: '處理中',
-    shipped: '已出貨',
-    delivered: '已送達',
-    cancelled: '已取消',
-  }
-
-  const statusColors: Record<string, { bg: string; text: string }> = {
-    pending: { bg: '#FEF3C7', text: '#92400E' },
-    processing: { bg: '#DBEAFE', text: '#1E40AF' },
-    shipped: { bg: '#D1FAE5', text: '#065F46' },
-    delivered: { bg: '#D1FAE5', text: '#065F46' },
-    cancelled: { bg: '#FEE2E2', text: '#7F1D1D' },
-  }
-
-  const statusSteps = [
-    { key: 'pending', label: '訂單確認' },
-    { key: 'processing', label: '準備中' },
-    { key: 'shipped', label: '已出貨' },
-    { key: 'delivered', label: '已送達' },
-  ]
-
-  if (isLoading || loading) {
+  if (authLoading || isLoading) {
     return (
       <MainLayout>
-        <div style={{ textAlign: 'center', padding: '3rem' }}>
-          <p>載入中...</p>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem', textAlign: 'center' }}>
+          <p style={{ color: '#6b7280' }}>載入中...</p>
         </div>
       </MainLayout>
     )
   }
 
-  if (!isAuthenticated || !order) {
+  if (!isAuthenticated) {
     return null
   }
 
-  const currentStepIndex = statusSteps.findIndex((s) => s.key === order.status)
+  if (error || !order) {
+    return (
+      <MainLayout>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem', textAlign: 'center' }}>
+          <p style={{ color: '#ef4444', marginBottom: '1rem' }}>無法加載訂單詳情</p>
+          <Link href="/orders" style={{ color: '#7c3aed', textDecoration: 'none' }}>
+            返回訂單列表
+          </Link>
+        </div>
+      </MainLayout>
+    )
+  }
+
+  const isPreorder = order.paymentMethod === 'bank_transfer'
+  const totalPrice = order.totalAmount / 100
+  const transferPrice = order.transferAmount ? order.transferAmount / 100 : totalPrice - 1
+  const timelineSteps = getTimelineSteps(order.status)
 
   return (
     <MainLayout>
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem' }}>
         {/* 返回按鈕 */}
-        <Link href="/orders">
-          <button
-            style={{
-              marginBottom: '2rem',
-              padding: '0.5rem 1rem',
-              background: '#F8F8F8',
-              color: '#7C3AED',
-              border: '1px solid #E5E7EB',
-              borderRadius: '0.375rem',
-              cursor: 'pointer',
-              fontSize: '0.875rem',
-            }}
-          >
-            ← 返回訂單列表
-          </button>
+        <Link
+          href="/orders"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            color: '#7c3aed',
+            textDecoration: 'none',
+            marginBottom: '1.5rem',
+            fontSize: '0.875rem',
+            fontWeight: '600',
+          }}
+        >
+          ← 返回訂單列表
         </Link>
 
         {/* 訂單頭部 */}
-        <div style={{ background: '#F8F8F8', padding: '2rem', borderRadius: '0.75rem', marginBottom: '2rem' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '2rem' }}>
+        <div
+          style={{
+            background: '#f8f8f8',
+            border: '1px solid #e5e7eb',
+            borderRadius: '0.5rem',
+            padding: '1.5rem',
+            marginBottom: '2rem',
+          }}
+        >
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '1rem' }}>
             <div>
-              <p style={{ color: '#6B7280', fontSize: '0.875rem', marginBottom: '0.25rem' }}>訂單編號</p>
-              <p style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#1A1A1A' }}>
-                {order.orderNumber}
+              <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#1a1a1a', marginBottom: '0.5rem' }}>
+                訂單詳情
+              </h1>
+              <p style={{ fontSize: '0.875rem', color: '#6b7280' }}>
+                訂單號：<span style={{ fontWeight: '600', color: '#1a1a1a' }}>{order.orderNumber}</span>
+              </p>
+              <p style={{ fontSize: '0.875rem', color: '#6b7280', marginTop: '0.25rem' }}>
+                下單時間：{new Date(order.createdAt).toLocaleString('zh-TW')}
               </p>
             </div>
-            <div>
-              <p style={{ color: '#6B7280', fontSize: '0.875rem', marginBottom: '0.25rem' }}>訂單狀態</p>
-              <span
-                style={{
-                  display: 'inline-block',
-                  padding: '0.5rem 1rem',
-                  borderRadius: '9999px',
-                  background: statusColors[order.status].bg,
-                  color: statusColors[order.status].text,
-                  fontSize: '0.875rem',
-                  fontWeight: '600',
-                }}
-              >
-                {statusLabels[order.status]}
-              </span>
-            </div>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
-            <div>
-              <p style={{ color: '#6B7280', fontSize: '0.875rem', marginBottom: '0.25rem' }}>訂購日期</p>
-              <p style={{ fontSize: '1rem', color: '#1A1A1A' }}>
-                {new Date(order.createdAt).toLocaleDateString('zh-TW')}
-              </p>
-            </div>
-            <div>
-              <p style={{ color: '#6B7280', fontSize: '0.875rem', marginBottom: '0.25rem' }}>總金額</p>
-              <p style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#7C3AED' }}>
-                ¥{(order.totalPrice / 100).toFixed(2)}
-              </p>
+            <div
+              style={{
+                padding: '0.75rem 1.5rem',
+                borderRadius: '0.375rem',
+                background: isPreorder
+                  ? getPaymentStatusColor(order.paymentStatus)
+                  : getStatusColor(order.status),
+                color: 'white',
+                fontSize: '0.875rem',
+                fontWeight: '600',
+              }}
+            >
+              {isPreorder ? getPaymentStatusLabel(order.paymentStatus) : getStatusLabel(order.status)}
             </div>
           </div>
         </div>
 
-        {/* 訂單進度 */}
-        <div style={{ background: '#F8F8F8', padding: '2rem', borderRadius: '0.75rem', marginBottom: '2rem' }}>
-          <h3 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '2rem', color: '#1A1A1A' }}>
-            訂單進度
-          </h3>
-
-          <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative' }}>
-            {/* 進度線 */}
-            <div
-              style={{
-                position: 'absolute',
-                top: '20px',
-                left: '0',
-                right: '0',
-                height: '2px',
-                background: '#E5E7EB',
-                zIndex: 0,
-              }}
-            />
-            <div
-              style={{
-                position: 'absolute',
-                top: '20px',
-                left: '0',
-                width: `${(currentStepIndex / (statusSteps.length - 1)) * 100}%`,
-                height: '2px',
-                background: '#7C3AED',
-                zIndex: 1,
-                transition: 'width 0.3s ease',
-              }}
-            />
-
-            {/* 進度步驟 */}
-            {statusSteps.map((step, index) => (
-              <div
-                key={step.key}
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  zIndex: 2,
-                  flex: 1,
-                }}
-              >
-                <div
-                  style={{
-                    width: '40px',
-                    height: '40px',
-                    borderRadius: '50%',
-                    background: index <= currentStepIndex ? '#7C3AED' : '#E5E7EB',
-                    color: 'white',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '1.25rem',
-                    fontWeight: 'bold',
-                    marginBottom: '0.75rem',
-                  }}
-                >
-                  {index <= currentStepIndex ? '✓' : index + 1}
-                </div>
-                <p style={{ fontSize: '0.875rem', color: index <= currentStepIndex ? '#7C3AED' : '#6B7280', fontWeight: '500' }}>
-                  {step.label}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 350px', gap: '2rem' }}>
-          {/* 主要內容 */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '2rem' }}>
+          {/* 左側：商品和時間線 */}
           <div>
             {/* 商品列表 */}
-            <div style={{ background: '#F8F8F8', padding: '2rem', borderRadius: '0.75rem', marginBottom: '2rem' }}>
-              <h3 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '1.5rem', color: '#1A1A1A' }}>
-                訂單商品
-              </h3>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                {order.items.map((item) => (
+            <div
+              style={{
+                background: '#f8f8f8',
+                border: '1px solid #e5e7eb',
+                borderRadius: '0.5rem',
+                padding: '1.5rem',
+                marginBottom: '2rem',
+              }}
+            >
+              <h2 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#1a1a1a', marginBottom: '1rem' }}>
+                商品信息
+              </h2>
+              {order.items.map((item) => (
+                <div
+                  key={item.id}
+                  style={{
+                    display: 'flex',
+                    gap: '1rem',
+                    padding: '1rem 0',
+                    borderBottom: '1px solid #e5e7eb',
+                  }}
+                >
                   <div
-                    key={item.id}
                     style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      padding: '1rem',
-                      background: '#ffffff',
+                      width: '80px',
+                      height: '80px',
+                      background: '#e5e7eb',
                       borderRadius: '0.375rem',
-                      border: '1px solid #E5E7EB',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '2rem',
+                      flexShrink: 0,
                     }}
                   >
-                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flex: 1 }}>
-                      <div
+                    📦
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <p style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1a1a1a', marginBottom: '0.25rem' }}>
+                      {item.productName || '未知商品'}
+                    </p>
+                    <p style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '0.5rem' }}>
+                      數量：{item.quantity}
+                    </p>
+                    <p style={{ fontSize: '0.875rem', fontWeight: '600', color: '#7c3aed' }}>
+                      ¥{(item.price / 100).toFixed(2)}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* 訂單時間線 */}
+            <div
+              style={{
+                background: '#f8f8f8',
+                border: '1px solid #e5e7eb',
+                borderRadius: '0.5rem',
+                padding: '1.5rem',
+              }}
+            >
+              <h2 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#1a1a1a', marginBottom: '1.5rem' }}>
+                訂單進度
+              </h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                {timelineSteps.map((step, index) => (
+                  <div key={index} style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
+                    <div
+                      style={{
+                        width: '24px',
+                        height: '24px',
+                        borderRadius: '50%',
+                        background: step.completed ? '#10b981' : '#e5e7eb',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'white',
+                        fontSize: '0.75rem',
+                        fontWeight: 'bold',
+                        flexShrink: 0,
+                      }}
+                    >
+                      {step.completed ? '✓' : ''}
+                    </div>
+                    <div>
+                      <p
                         style={{
-                          width: '80px',
-                          height: '80px',
-                          background: '#E5E7EB',
-                          borderRadius: '0.375rem',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          fontSize: '2rem',
+                          fontSize: '0.875rem',
+                          fontWeight: '600',
+                          color: step.completed ? '#10b981' : '#6b7280',
                         }}
                       >
-                        📦
-                      </div>
-                      <div>
-                        <h4 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '0.25rem', color: '#1A1A1A' }}>
-                          {item.productName}
-                        </h4>
-                        <p style={{ color: '#6B7280', fontSize: '0.875rem' }}>
-                          數量：{item.quantity}
-                        </p>
-                      </div>
-                    </div>
-                    <div style={{ textAlign: 'right', minWidth: '100px' }}>
-                      <p style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#7C3AED' }}>
-                        ¥{((item.price * item.quantity) / 100).toFixed(2)}
-                      </p>
-                      <p style={{ fontSize: '0.875rem', color: '#6B7280' }}>
-                        ¥{(item.price / 100).toFixed(2)} × {item.quantity}
+                        {step.label}
                       </p>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
-
-            {/* 配送信息 */}
-            {order.status !== 'cancelled' && (
-              <div style={{ background: '#F8F8F8', padding: '2rem', borderRadius: '0.75rem' }}>
-                <h3 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '1.5rem', color: '#1A1A1A' }}>
-                  配送信息
-                </h3>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                  <div>
-                    <p style={{ color: '#6B7280', fontSize: '0.875rem', marginBottom: '0.25rem' }}>
-                      收貨地址
-                    </p>
-                    <p style={{ color: '#1A1A1A', fontSize: '1rem' }}>
-                      {order.shippingAddress}
-                    </p>
-                  </div>
-
-                  {order.trackingNumber && (
-                    <div>
-                      <p style={{ color: '#6B7280', fontSize: '0.875rem', marginBottom: '0.25rem' }}>
-                        追蹤號碼
-                      </p>
-                      <p style={{ color: '#1A1A1A', fontSize: '1rem', fontFamily: 'monospace' }}>
-                        {order.trackingNumber}
-                      </p>
-                    </div>
-                  )}
-
-                  {order.estimatedDelivery && (
-                    <div>
-                      <p style={{ color: '#6B7280', fontSize: '0.875rem', marginBottom: '0.25rem' }}>
-                        預計送達日期
-                      </p>
-                      <p style={{ color: '#1A1A1A', fontSize: '1rem' }}>
-                        {new Date(order.estimatedDelivery).toLocaleDateString('zh-TW')}
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
           </div>
 
-          {/* 側邊欄 */}
+          {/* 右側：價格明細和收件信息 */}
           <div>
-            {/* 訂單摘要 */}
-            <div style={{ background: '#F8F8F8', padding: '1.5rem', borderRadius: '0.75rem' }}>
-              <h3 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '1rem', color: '#1A1A1A' }}>
-                訂單摘要
-              </h3>
-
+            {/* 價格明細 */}
+            <div
+              style={{
+                background: '#f8f8f8',
+                border: '1px solid #e5e7eb',
+                borderRadius: '0.5rem',
+                padding: '1.5rem',
+                marginBottom: '2rem',
+              }}
+            >
+              <h2 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#1a1a1a', marginBottom: '1rem' }}>
+                價格明細
+              </h2>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{ color: '#6B7280' }}>小計</span>
-                  <span style={{ color: '#1A1A1A', fontWeight: '500' }}>
-                    ¥{(order.totalPrice / 100).toFixed(2)}
+                  <span style={{ fontSize: '0.875rem', color: '#6b7280' }}>商品小計</span>
+                  <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1a1a1a' }}>
+                    ¥{totalPrice.toFixed(2)}
                   </span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{ color: '#6B7280' }}>運費</span>
-                  <span style={{ color: '#1A1A1A', fontWeight: '500' }}>¥0.00</span>
+                  <span style={{ fontSize: '0.875rem', color: '#6b7280' }}>運費</span>
+                  <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1a1a1a' }}>¥0.00</span>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{ color: '#6B7280' }}>稅金</span>
-                  <span style={{ color: '#1A1A1A', fontWeight: '500' }}>¥0.00</span>
+                <div style={{ borderTop: '1px solid #e5e7eb', paddingTop: '0.75rem', marginTop: '0.75rem' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ fontSize: '1rem', fontWeight: '600', color: '#1a1a1a' }}>
+                      {isPreorder ? '需匯款金額' : '總計'}
+                    </span>
+                    <span
+                      style={{
+                        fontSize: '1.25rem',
+                        fontWeight: 'bold',
+                        color: '#7c3aed',
+                      }}
+                    >
+                      ¥{isPreorder ? transferPrice.toFixed(2) : totalPrice.toFixed(2)}
+                    </span>
+                  </div>
                 </div>
               </div>
+            </div>
 
-              <div
-                style={{
-                  borderTop: '1px solid #E5E7EB',
-                  paddingTop: '1rem',
-                  marginTop: '1rem',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <span style={{ fontSize: '1.125rem', fontWeight: '600', color: '#1A1A1A' }}>合計</span>
-                <span style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#7C3AED' }}>
-                  ¥{(order.totalPrice / 100).toFixed(2)}
-                </span>
-              </div>
-
-              {/* 操作按鈕 */}
-              <div style={{ marginTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                {order.status === 'delivered' && (
-                  <button
+            {/* 收件信息 */}
+            <div
+              style={{
+                background: '#f8f8f8',
+                border: '1px solid #e5e7eb',
+                borderRadius: '0.5rem',
+                padding: '1.5rem',
+              }}
+            >
+              <h2 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#1a1a1a', marginBottom: '1rem' }}>
+                收件信息
+              </h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <div>
+                  <p style={{ fontSize: '0.75rem', color: '#6b7280', marginBottom: '0.25rem', textTransform: 'uppercase' }}>
+                    配送地址
+                  </p>
+                  <p style={{ fontSize: '0.875rem', color: '#1a1a1a', fontWeight: '600' }}>
+                    {order.shippingAddress || '未提供地址'}
+                  </p>
+                </div>
+                {isPreorder && (
+                  <div
                     style={{
-                      width: '100%',
-                      padding: '0.75rem',
-                      background: '#7C3AED',
-                      color: 'white',
-                      border: 'none',
+                      background: '#f0f4ff',
+                      border: '1px solid #dbeafe',
                       borderRadius: '0.375rem',
-                      cursor: 'pointer',
-                      fontSize: '0.875rem',
-                      fontWeight: '600',
+                      padding: '1rem',
                     }}
                   >
-                    再次購買
-                  </button>
+                    <p style={{ fontSize: '0.75rem', color: '#1e40af', marginBottom: '0.25rem', fontWeight: '600' }}>
+                      預購訂單
+                    </p>
+                    <p style={{ fontSize: '0.875rem', color: '#1e40af' }}>
+                      {getPaymentStatusLabel(order.paymentStatus)}
+                    </p>
+                  </div>
                 )}
-                <button
-                  style={{
-                    width: '100%',
-                    padding: '0.75rem',
-                    background: '#F8F8F8',
-                    color: '#7C3AED',
-                    border: '1px solid #E5E7EB',
-                    borderRadius: '0.375rem',
-                    cursor: 'pointer',
-                    fontSize: '0.875rem',
-                  }}
-                >
-                  聯絡客服
-                </button>
               </div>
             </div>
           </div>
+        </div>
+
+        {/* 操作按鈕 */}
+        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+          <Link
+            href="/orders"
+            style={{
+              padding: '0.75rem 1.5rem',
+              background: '#f3f4f6',
+              color: '#1a1a1a',
+              border: 'none',
+              borderRadius: '0.375rem',
+              cursor: 'pointer',
+              fontSize: '0.875rem',
+              fontWeight: '600',
+              textDecoration: 'none',
+              display: 'inline-block',
+            }}
+          >
+            返回訂單列表
+          </Link>
+          <button
+            style={{
+              padding: '0.75rem 1.5rem',
+              background: '#7c3aed',
+              color: 'white',
+              border: 'none',
+              borderRadius: '0.375rem',
+              cursor: 'pointer',
+              fontSize: '0.875rem',
+              fontWeight: '600',
+            }}
+            onClick={() => {
+              // 聯絡客服
+              alert('客服功能即將推出')
+            }}
+          >
+            聯絡客服
+          </button>
         </div>
       </div>
     </MainLayout>
