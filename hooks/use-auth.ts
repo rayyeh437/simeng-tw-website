@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { getCurrentUser, logoutUser, type User } from '@/lib/auth-api'
+import { getCurrentUser, logoutUser, getStoredUser, type User } from '@/lib/auth-api'
 
 interface UseAuthReturn {
   user: User | null
@@ -18,11 +18,28 @@ export function useAuth(): UseAuthReturn {
   const fetchUser = useCallback(async () => {
     try {
       setIsLoading(true)
+      // 優先從 localStorage 獲取
+      const storedUser = getStoredUser()
+      if (storedUser) {
+        setUser(storedUser)
+      }
+      
+      // 然後嘗試從 API 獲取最新信息
       const currentUser = await getCurrentUser()
-      setUser(currentUser)
+      if (currentUser) {
+        setUser(currentUser)
+      } else if (!storedUser) {
+        setUser(null)
+      }
     } catch (error) {
       console.error('Failed to fetch user:', error)
-      setUser(null)
+      // 如果 API 失敗，嘗試使用 localStorage 中的用戶信息
+      const storedUser = getStoredUser()
+      if (storedUser) {
+        setUser(storedUser)
+      } else {
+        setUser(null)
+      }
     } finally {
       setIsLoading(false)
     }
@@ -38,6 +55,7 @@ export function useAuth(): UseAuthReturn {
       setUser(null)
     } catch (error) {
       console.error('Failed to logout:', error)
+      setUser(null)
     }
   }, [])
 
