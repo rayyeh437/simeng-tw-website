@@ -1,209 +1,204 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { MainLayout } from '@/components/layout'
 import { useAuth } from '@/hooks/use-auth'
-import { ProtectedRoute } from '@/components/protected-route'
+import { trpc } from '@/lib/trpc'
 
-function AdminPageContent() {
+interface DashboardStats {
+  totalOrders: number
+  totalUsers: number
+  totalRevenue: number
+  pendingOrders: number
+  todayOrders: number
+  todayRevenue: number
+}
+
+export default function AdminDashboardPage() {
+  const { isAuthenticated, isLoading: authLoading, user } = useAuth()
   const router = useRouter()
-  const { user, logout } = useAuth()
+  const [stats, setStats] = useState<DashboardStats>({
+    totalOrders: 0,
+    totalUsers: 0,
+    totalRevenue: 0,
+    pendingOrders: 0,
+    todayOrders: 0,
+    todayRevenue: 0,
+  })
+  const [loading, setLoading] = useState(true)
 
-  const handleLogout = async () => {
-    await logout()
-    router.push('/auth/login')
+  // 重定向未登入用戶
+  useEffect(() => {
+    if (!authLoading && !isAuthenticated) {
+      router.push('/user-login')
+    }
+  }, [isAuthenticated, authLoading, router])
+
+  // 獲取訂單統計
+  const { data: orderStats } = trpc.orders.stats.useQuery(undefined as any, {
+    enabled: isAuthenticated && !authLoading,
+  }) as any
+
+  useEffect(() => {
+    if (orderStats) {
+      // 計算統計數據
+      const totalOrders = Object.values(orderStats).reduce((a: number, b: number) => a + b, 0)
+      const pendingOrders = orderStats.pending || 0
+
+      setStats({
+        totalOrders,
+        totalUsers: 0, // 需要從 API 獲取
+        totalRevenue: 0, // 需要從 API 獲取
+        pendingOrders,
+        todayOrders: 0, // 需要從 API 獲取
+        todayRevenue: 0, // 需要從 API 獲取
+      })
+      setLoading(false)
+    }
+  }, [orderStats])
+
+  if (authLoading) {
+    return (
+      <MainLayout>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem', textAlign: 'center' }}>
+          <p style={{ color: '#6b7280' }}>載入中...</p>
+        </div>
+      </MainLayout>
+    )
+  }
+
+  if (!isAuthenticated) {
+    return null
   }
 
   return (
-    <div style={{ padding: '20px' }}>
-      {/* 頂部用戶菜單 */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px', paddingBottom: '20px', borderBottom: '1px solid #eee' }}>
-        <h1>後台管理系統</h1>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-          <span style={{ color: '#666' }}>
-            歡迎，<strong>{user?.name || user?.email}</strong>
-          </span>
-          <button
-            onClick={handleLogout}
-            style={{
-              background: '#dc3545',
-              color: 'white',
-              padding: '8px 16px',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontSize: '14px',
-            }}
-          >
-            登出
-          </button>
+    <MainLayout>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem' }}>
+        {/* 頁面頭部 */}
+        <div style={{ marginBottom: '2rem' }}>
+          <h1 style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#1a1a1a', marginBottom: '0.5rem' }}>
+            管理後台
+          </h1>
+          <p style={{ fontSize: '0.875rem', color: '#6b7280' }}>
+            歡迎回來，{user?.nickname || user?.email}
+          </p>
         </div>
-      </div>
 
-      <p style={{ color: '#666', marginBottom: '30px' }}>
-        歡迎使用喜萌後台管理系統。您可以在此管理商品、分類、訂單等信息。
-      </p>
+        {/* 統計卡片 */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
+          {[
+            { label: '總訂單數', value: stats.totalOrders, color: '#3b82f6', icon: '📦' },
+            { label: '待確認訂單', value: stats.pendingOrders, color: '#f59e0b', icon: '⏳' },
+            { label: '總用戶數', value: stats.totalUsers, color: '#10b981', icon: '👥' },
+            { label: '總營收', value: `¥${(stats.totalRevenue / 100).toFixed(2)}`, color: '#7c3aed', icon: '💰' },
+          ].map((stat) => (
+            <div
+              key={stat.label}
+              style={{
+                background: '#f8f8f8',
+                border: '1px solid #e5e7eb',
+                borderRadius: '0.5rem',
+                padding: '1.5rem',
+              }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
+                <div>
+                  <p style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '0.5rem' }}>
+                    {stat.label}
+                  </p>
+                  <p style={{ fontSize: '1.875rem', fontWeight: 'bold', color: stat.color }}>
+                    {stat.value}
+                  </p>
+                </div>
+                <div style={{ fontSize: '2rem' }}>{stat.icon}</div>
+              </div>
+            </div>
+          ))}
+        </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px' }}>
-        {/* 商品管理 */}
-        <Link href="/admin/products">
+        {/* 快速操作 */}
+        <div style={{ marginBottom: '2rem' }}>
+          <h2 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#1a1a1a', marginBottom: '1rem' }}>
+            快速操作
+          </h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+            {[
+              { label: '訂單管理', href: '/admin/orders', icon: '📋' },
+              { label: '商品管理', href: '/admin/products', icon: '🛍️' },
+              { label: '用戶管理', href: '/admin/users', icon: '👨‍💼' },
+              { label: '優惠券管理', href: '/admin/coupons', icon: '🎟️' },
+              { label: '分類管理', href: '/admin/categories', icon: '📂' },
+              { label: '系統設置', href: '/admin/settings', icon: '⚙️' },
+            ].map((item) => (
+              <Link
+                key={item.label}
+                href={item.href}
+                style={{
+                  background: '#f8f8f8',
+                  border: '1px solid #e5e7eb',
+                  borderRadius: '0.5rem',
+                  padding: '1.5rem',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '1rem',
+                  transition: 'all 0.3s ease',
+                  cursor: 'pointer',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = '#f3e8ff'
+                  e.currentTarget.style.borderColor = '#7c3aed'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = '#f8f8f8'
+                  e.currentTarget.style.borderColor = '#e5e7eb'
+                }}
+              >
+                <div style={{ fontSize: '1.5rem' }}>{item.icon}</div>
+                <div>
+                  <p style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1a1a1a' }}>
+                    {item.label}
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* 最近訂單 */}
+        <div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+            <h2 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#1a1a1a' }}>
+              最近訂單
+            </h2>
+            <Link
+              href="/admin/orders"
+              style={{
+                fontSize: '0.875rem',
+                color: '#7c3aed',
+                textDecoration: 'none',
+                fontWeight: '600',
+              }}
+            >
+              查看全部 →
+            </Link>
+          </div>
           <div
             style={{
-              padding: '20px',
-              background: '#f9f9f9',
-              borderRadius: '8px',
-              border: '1px solid #eee',
-              cursor: 'pointer',
-              transition: 'all 0.3s ease',
-            }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.background = '#f0f0f0'
-              e.currentTarget.style.transform = 'translateY(-5px)'
-              e.currentTarget.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)'
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.background = '#f9f9f9'
-              e.currentTarget.style.transform = 'translateY(0)'
-              e.currentTarget.style.boxShadow = 'none'
+              background: '#f8f8f8',
+              border: '1px solid #e5e7eb',
+              borderRadius: '0.5rem',
+              padding: '1.5rem',
+              textAlign: 'center',
+              color: '#6b7280',
             }}
           >
-            <h3 style={{ marginBottom: '10px', color: '#333' }}>📦 商品管理</h3>
-            <p style={{ color: '#666', fontSize: '14px' }}>
-              新增、編輯、刪除商品，管理商品信息和庫存
-            </p>
-          </div>
-        </Link>
-
-        {/* 分類管理 */}
-        <Link href="/admin/categories">
-          <div
-            style={{
-              padding: '20px',
-              background: '#f9f9f9',
-              borderRadius: '8px',
-              border: '1px solid #eee',
-              cursor: 'pointer',
-              transition: 'all 0.3s ease',
-            }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.background = '#f0f0f0'
-              e.currentTarget.style.transform = 'translateY(-5px)'
-              e.currentTarget.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)'
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.background = '#f9f9f9'
-              e.currentTarget.style.transform = 'translateY(0)'
-              e.currentTarget.style.boxShadow = 'none'
-            }}
-          >
-            <h3 style={{ marginBottom: '10px', color: '#333' }}>🏷️ 分類管理</h3>
-            <p style={{ color: '#666', fontSize: '14px' }}>
-              管理商品分類，設置分類順序和狀態
-            </p>
-          </div>
-        </Link>
-
-        {/* 訂單管理 */}
-        <div
-          style={{
-            padding: '20px',
-            background: '#f9f9f9',
-            borderRadius: '8px',
-            border: '1px solid #eee',
-            opacity: 0.6,
-            cursor: 'not-allowed',
-          }}
-        >
-          <h3 style={{ marginBottom: '10px', color: '#999' }}>📋 訂單管理</h3>
-          <p style={{ color: '#999', fontSize: '14px' }}>
-            查看和管理訂單信息（即將推出）
-          </p>
-        </div>
-
-        {/* 優惠券管理 */}
-        <div
-          style={{
-            padding: '20px',
-            background: '#f9f9f9',
-            borderRadius: '8px',
-            border: '1px solid #eee',
-            opacity: 0.6,
-            cursor: 'not-allowed',
-          }}
-        >
-          <h3 style={{ marginBottom: '10px', color: '#999' }}>🎟️ 優惠券管理</h3>
-          <p style={{ color: '#999', fontSize: '14px' }}>
-            創建和管理優惠券（即將推出）
-          </p>
-        </div>
-
-        {/* 用戶管理 */}
-        <div
-          style={{
-            padding: '20px',
-            background: '#f9f9f9',
-            borderRadius: '8px',
-            border: '1px solid #eee',
-            opacity: 0.6,
-            cursor: 'not-allowed',
-          }}
-        >
-          <h3 style={{ marginBottom: '10px', color: '#999' }}>👥 用戶管理</h3>
-          <p style={{ color: '#999', fontSize: '14px' }}>
-            管理用戶信息和權限（即將推出）
-          </p>
-        </div>
-
-        {/* 數據統計 */}
-        <div
-          style={{
-            padding: '20px',
-            background: '#f9f9f9',
-            borderRadius: '8px',
-            border: '1px solid #eee',
-            opacity: 0.6,
-            cursor: 'not-allowed',
-          }}
-        >
-          <h3 style={{ marginBottom: '10px', color: '#999' }}>📊 數據統計</h3>
-          <p style={{ color: '#999', fontSize: '14px' }}>
-            查看銷售數據和統計信息（即將推出）
-          </p>
-        </div>
-      </div>
-
-      {/* 系統信息 */}
-      <div style={{ marginTop: '40px', padding: '20px', background: '#f5f5f5', borderRadius: '8px' }}>
-        <h3 style={{ marginBottom: '15px', color: '#333' }}>系統信息</h3>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px' }}>
-          <div>
-            <p style={{ color: '#666', fontSize: '14px', marginBottom: '5px' }}>API 伺服器</p>
-            <p style={{ color: '#333', fontWeight: 'bold' }}>
-              {process.env.NEXT_PUBLIC_API_URL || 'https://maibaoshop-hqnzqh8u.manus.space'}
-            </p>
-          </div>
-          <div>
-            <p style={{ color: '#666', fontSize: '14px', marginBottom: '5px' }}>應用名稱</p>
-            <p style={{ color: '#333', fontWeight: 'bold' }}>
-              {process.env.NEXT_PUBLIC_APP_NAME || '喜萌'}
-            </p>
-          </div>
-          <div>
-            <p style={{ color: '#666', fontSize: '14px', marginBottom: '5px' }}>用戶角色</p>
-            <p style={{ color: '#333', fontWeight: 'bold' }}>
-              {user?.role === 'admin' ? '管理員' : '普通用戶'}
-            </p>
+            <p>暫無最近訂單</p>
           </div>
         </div>
       </div>
-    </div>
-  )
-}
-
-export default function AdminPage() {
-  return (
-    <ProtectedRoute requiredRole="admin">
-      <AdminPageContent />
-    </ProtectedRoute>
+    </MainLayout>
   )
 }
