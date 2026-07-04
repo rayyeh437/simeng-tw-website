@@ -84,7 +84,7 @@ export function clearAuthData(): void {
  */
 export async function loginUser(email: string, password: string): Promise<LoginResponse> {
   try {
-    const response = await fetch(`${API_URL}/trpc/auth.loginLocal`, {
+    const response = await fetch(`${API_URL}/api/trpc/auth.loginLocal`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -149,7 +149,7 @@ export async function registerUser(
   name: string
 ): Promise<RegisterResponse> {
   try {
-    const response = await fetch(`${API_URL}/trpc/auth.registerLocal`, {
+    const response = await fetch(`${API_URL}/api/trpc/auth.registerLocal`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -209,7 +209,7 @@ export async function getCurrentUser(): Promise<User | null> {
     const token = getStoredToken();
     
     // 調用 auth.me 獲取最新的用戶信息
-    const response = await fetch(`${API_URL}/trpc/auth.me`, {
+    const response = await fetch(`${API_URL}/api/trpc/auth.me`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -258,7 +258,7 @@ export async function logoutUser(): Promise<boolean> {
     const user = getStoredUser();
     
     // 調用 logout 端點
-    const response = await fetch(`${API_URL}/trpc/auth.logout`, {
+    const response = await fetch(`${API_URL}/api/trpc/auth.logout`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -296,7 +296,7 @@ export async function sendOtpCode(mobile: string): Promise<{ success: boolean; e
       };
     }
 
-    const response = await fetch(`${API_URL}/trpc/auth.sendOtp`, {
+    const response = await fetch(`${API_URL}/api/trpc/auth.sendOtp`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -345,7 +345,7 @@ export async function verifyOtpCode(mobile: string, code: string): Promise<{ suc
       };
     }
 
-    const response = await fetch(`${API_URL}/trpc/auth.verifyOtp`, {
+    const response = await fetch(`${API_URL}/api/trpc/auth.verifyOtp`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
