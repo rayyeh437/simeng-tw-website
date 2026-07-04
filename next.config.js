@@ -20,6 +20,9 @@ const nextConfig = {
     maxInactiveAge: 60 * 1000,
     pagesBufferLength: 5,
   },
+  // 禁用 error 和 not-found 頁面的靜態預生成
+  experimental: {
+    // 允許在運行時動態渲染特殊頁面
+  },
 }
-
 module.exports = nextConfig
