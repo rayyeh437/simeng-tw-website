@@ -20,11 +20,6 @@ const nextConfig = {
     maxInactiveAge: 60 * 1000,
     pagesBufferLength: 5,
   },
-  // 禁用 ISR 快取以避免預生成問題
-  experimental: {
-    // 允許特殊頁面在運行時動態渲染
-    dynamicIO: true,
-  },
 }
 
 module.exports = nextConfig
