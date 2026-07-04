@@ -1,4 +1,7 @@
-'use client'
+'use client';
+export const dynamic = 'force-dynamic';
+
+
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
@@ -44,7 +47,7 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     if (orderStats) {
       // 計算統計數據
-      const totalOrders = Object.values(orderStats).reduce((a: number, b: number) => a + b, 0)
+      const totalOrders = Object.values(orderStats).reduce((a: number, b: any) => a + (typeof b === 'number' ? b : 0), 0)
       const pendingOrders = orderStats.pending || 0
 
       setStats({

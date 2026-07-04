@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 /**
  * Next.js API 代理路由
  * 用於通過 Fixie 固定 IP 代理轉發 API 請求

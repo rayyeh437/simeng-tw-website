@@ -1,4 +1,7 @@
-'use client'
+'use client';
+export const dynamic = 'force-dynamic';
+
+
 
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
@@ -220,7 +223,7 @@ export default function OrderDetailPage() {
               <h2 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#1a1a1a', marginBottom: '1rem' }}>
                 商品信息
               </h2>
-              {order.items.map((item) => (
+              {order.items.map((item: any) => (
                 <div
                   key={item.id}
                   style={{
