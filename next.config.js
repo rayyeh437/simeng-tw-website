@@ -20,9 +20,5 @@ const nextConfig = {
     maxInactiveAge: 60 * 1000,
     pagesBufferLength: 5,
   },
-  // 禁用 error 和 not-found 頁面的靜態預生成
-  experimental: {
-    isrMemoryCacheSize: 0,
-  },
 }
 module.exports = nextConfig
