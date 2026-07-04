@@ -9,12 +9,12 @@ function LoadingUI() {
     </div>
   )
 }
-import { [Id]Client } from './client'
+import { IdClient } from './client'
 
 export default function Page() {
   return (
     <Suspense fallback={<LoadingUI />}>
-      <[Id]Client />
+      <IdClient />
     </Suspense>
   )
 }

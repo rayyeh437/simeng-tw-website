@@ -71,7 +71,7 @@ const SHARE_OPTIONS = [
   { id: 'twitter', name: 'Twitter', icon: '𝕏', color: '#000000' },
 ]
 
-export function [Id]Client() {
+export function IdClient() {
   const params = useParams()
   const productId = params.id as string
   const [isFavorited, setIsFavorited] = useState(false)

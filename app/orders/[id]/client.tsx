@@ -95,7 +95,7 @@ const getTimelineSteps = (status: OrderStatus): Array<{ label: string; completed
   return steps
 }
 
-export function [Id]Client() {
+export function IdClient() {
   const params = useParams()
   const router = useRouter()
   const { isAuthenticated, isLoading: authLoading } = useAuth()
