@@ -15,11 +15,6 @@ const nextConfig = {
   typescript: {
     tsconfigPath: './tsconfig.json',
   },
-  // 禁用內置錯誤頁面的預生成
-  experimental: {
-    // 允許內置頁面在運行時動態渲染
-    isrMemoryCacheSize: 0,
-  },
 }
 
 module.exports = nextConfig
