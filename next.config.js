@@ -15,6 +15,10 @@ const nextConfig = {
   typescript: {
     tsconfigPath: './tsconfig.json',
   },
+  // 禁用特殊頁面的預生成
+  experimental: {
+    // 允許在運行時動態渲染特殊頁面
+  },
 }
 
 module.exports = nextConfig
