@@ -4,7 +4,8 @@
   "installCommand": "pnpm install",
   "regions": ["sin1"],
   "env": {
-    "NEXT_SKIP_PREGENERATION": "true"
+    "NEXT_SKIP_PREGENERATION": "true",
+    "NEXT_PUBLIC_API_URL": "https://maibaoshop-hqnzqh8u.manus.space"
   },
   "headers": [
     {
