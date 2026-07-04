@@ -23,10 +23,7 @@ const nextConfig = {
   // 禁用 ISR 快取以避免預生成問題
   experimental: {
     // 允許特殊頁面在運行時動態渲染
-  },
-  // 自定義 webpack 配置以支持 CSS modules
-  webpack: (config) => {
-    return config;
+    dynamicIO: true,
   },
 }
 
