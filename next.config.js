@@ -22,7 +22,7 @@ const nextConfig = {
   },
   // 禁用 error 和 not-found 頁面的靜態預生成
   experimental: {
-    // 允許在運行時動態渲染特殊頁面
+    isrMemoryCacheSize: 0,
   },
 }
 module.exports = nextConfig
