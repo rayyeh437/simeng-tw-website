@@ -1,9 +1,9 @@
+'use client';
 import Link from 'next/link'
 import type { Category } from '@/lib/types'
 import { ProtectedRoute } from '@/components/protected-route'
 import { getCategories } from '@/lib/api'
 import { useState, useEffect } from 'react'
-'use client';
 
 
 function CategoriesContent() {

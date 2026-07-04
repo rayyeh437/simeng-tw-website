@@ -1,8 +1,8 @@
+'use client';
 import Link from 'next/link'
 import { loginUser } from '@/lib/auth-api'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-'use client';
 
 
 export function LoginClient() {

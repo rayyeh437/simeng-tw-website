@@ -1,9 +1,9 @@
+'use client';
 import Link from 'next/link'
 import { MainLayout } from '@/components/layout'
 import { useAuth } from '@/hooks/use-auth'
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
-'use client';
 
 
 export function PageClient() {

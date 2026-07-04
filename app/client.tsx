@@ -1,7 +1,7 @@
+'use client';
 import Link from 'next/link'
 import { MainLayout } from '@/components/layout'
 import { useState, useEffect } from 'react'
-'use client';
 
 
 const CATEGORIES = [

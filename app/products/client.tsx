@@ -1,9 +1,9 @@
+'use client';
 import Link from 'next/link'
 import type { Product, Category } from '@/lib/types'
 import { MainLayout } from '@/components/layout'
 import { searchProducts, getCategories } from '@/lib/api'
 import { useState, useEffect } from 'react'
-'use client';
 
 
 export function ProductsClient() {

@@ -1,9 +1,9 @@
+'use client';
 import Link from 'next/link'
 import type { Product, Category } from '@/lib/types'
 import { ProtectedRoute } from '@/components/protected-route'
 import { getCategories, searchProducts } from '@/lib/api'
 import { useState, useEffect } from 'react'
-'use client';
 
 
 function ProductsContent() {

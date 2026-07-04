@@ -1,10 +1,10 @@
+'use client';
 import Link from 'next/link'
 import { MainLayout } from '@/components/layout'
 import { trpc } from '@/lib/trpc'
 import { useAuth } from '@/hooks/use-auth'
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
-'use client';
 
 
 interface Order {
