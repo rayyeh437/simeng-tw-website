@@ -8,7 +8,10 @@ const nextConfig = {
     NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME || '喜萌',
     NEXT_PUBLIC_LANGUAGE: process.env.NEXT_PUBLIC_LANGUAGE || 'zh-TW',
   },
-  // 完全禁用靜態生成
+  // 禁用靜態生成超時
+  staticPageGenerationTimeout: 0,
+  // 跳過尾部斜杠重定向
+  skipTrailingSlashRedirect: true,
   typescript: {
     tsconfigPath: './tsconfig.json',
   },
