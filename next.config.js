@@ -12,8 +12,7 @@ const nextConfig = {
   typescript: {
     tsconfigPath: './tsconfig.json',
   },
-  // 禁用靜態優化
-  swcMinify: true,
+
 }
 
 module.exports = nextConfig
