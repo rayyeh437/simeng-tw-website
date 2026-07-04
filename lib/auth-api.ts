@@ -111,18 +111,19 @@ export async function loginUser(email: string, password: string): Promise<LoginR
     // tRPC 返回格式: { result: { data: {...} } }
     const result = (data as any)?.result?.data;
     
-    if (result?.success) {
-      const token = result.token || result.sessionToken;
+    if (result?.success && result?.user) {
+      // 後端現在返回 sessionToken
+      const token = result.sessionToken || result.token;
       const user = result.user;
       
-      // 保存 Token 和用戶信息
+      // 保存 Token 和用戶信息到 localStorage
       if (token && user) {
         saveAuthData(token, user);
       }
       
       return {
         success: true,
-        user: result.user,
+        user: user,
         token: token,
       };
     }
@@ -199,37 +200,49 @@ export async function registerUser(
  */
 export async function getCurrentUser(): Promise<User | null> {
   try {
+    // 先從 localStorage 獲取用戶信息
+    const cachedUser = getStoredUser();
+    if (!cachedUser?.id) {
+      return null;
+    }
+    
     const token = getStoredToken();
     
+    // 調用 auth.me 獲取最新的用戶信息
     const response = await fetch(`${API_URL}/trpc/auth.me`, {
-      method: 'GET',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         ...(token && { 'Authorization': `Bearer ${token}` }),
       },
+      body: JSON.stringify({
+        json: {
+          userId: cachedUser.id,
+        },
+      }),
       credentials: 'include', // 包含 Cookie
     });
 
     if (!response.ok) {
-      // 如果 API 失敗，嘗試從 localStorage 返回緩存的用戶信息
-      return getStoredUser();
+      // 如果 API 失敗，返回緩存的用戶信息
+      return cachedUser;
     }
 
     const data = await response.json();
     
-    // tRPC 返回格式: { result: { data: {...} } }
-    const user = (data as any)?.result?.data;
+    // tRPC 返回格式: { result: { data: { user: {...} } } }
+    const result = (data as any)?.result?.data;
+    const user = result?.user;
     
     if (user?.id) {
       // 更新 localStorage 中的用戶信息
-      const token = getStoredToken();
       if (token) {
         saveAuthData(token, user);
       }
       return user;
     }
 
-    return getStoredUser();
+    return cachedUser;
   } catch (error) {
     // 返回緩存的用戶信息
     return getStoredUser();
@@ -242,13 +255,20 @@ export async function getCurrentUser(): Promise<User | null> {
 export async function logoutUser(): Promise<boolean> {
   try {
     const token = getStoredToken();
+    const user = getStoredUser();
     
+    // 調用 logout 端點
     const response = await fetch(`${API_URL}/trpc/auth.logout`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         ...(token && { 'Authorization': `Bearer ${token}` }),
       },
+      body: JSON.stringify({
+        json: {
+          userId: user?.id || 0,
+        },
+      }),
       credentials: 'include', // 包含 Cookie
     });
 
@@ -268,13 +288,22 @@ export async function logoutUser(): Promise<boolean> {
  */
 export async function sendOtpCode(mobile: string): Promise<{ success: boolean; error?: string }> {
   try {
-    const response = await fetch(`${API_URL}/trpc/auth.sendOtpSms`, {
+    const user = getStoredUser();
+    if (!user?.id) {
+      return {
+        success: false,
+        error: '請先登入',
+      };
+    }
+
+    const response = await fetch(`${API_URL}/trpc/auth.sendOtp`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         json: {
+          userId: user.id,
           mobile,
         },
       }),
@@ -284,7 +313,7 @@ export async function sendOtpCode(mobile: string): Promise<{ success: boolean; e
       const error = await response.text();
       return {
         success: false,
-        error: error || '發送驗證碼失敗',
+        error: error || '発送驗證碼失敗',
       };
     }
 
@@ -293,12 +322,12 @@ export async function sendOtpCode(mobile: string): Promise<{ success: boolean; e
     
     return {
       success: result?.success || true,
-      error: result?.error,
+      error: result?.error || result?.message,
     };
   } catch (error) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : '發送驗證碼失敗',
+      error: error instanceof Error ? error.message : '発送驗證碼失敗',
     };
   }
 }
@@ -308,6 +337,14 @@ export async function sendOtpCode(mobile: string): Promise<{ success: boolean; e
  */
 export async function verifyOtpCode(mobile: string, code: string): Promise<{ success: boolean; error?: string }> {
   try {
+    const user = getStoredUser();
+    if (!user?.id) {
+      return {
+        success: false,
+        error: '請先登入',
+      };
+    }
+
     const response = await fetch(`${API_URL}/trpc/auth.verifyOtp`, {
       method: 'POST',
       headers: {
@@ -315,6 +352,7 @@ export async function verifyOtpCode(mobile: string, code: string): Promise<{ suc
       },
       body: JSON.stringify({
         json: {
+          userId: user.id,
           mobile,
           code,
         },
@@ -334,7 +372,7 @@ export async function verifyOtpCode(mobile: string, code: string): Promise<{ suc
     
     return {
       success: result?.success || true,
-      error: result?.error,
+      error: result?.error || result?.message,
     };
   } catch (error) {
     return {
