@@ -1,5 +1,3 @@
-export const dynamic = 'force-dynamic';
-
 export default function NotFound() {
   return (
     <div style={{ textAlign: 'center', padding: '50px' }}>

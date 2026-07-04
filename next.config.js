@@ -17,12 +17,8 @@ const nextConfig = {
   },
   // 禁用內置錯誤頁面的預生成
   experimental: {
-    // 禁用某些頁面的預生成
-  },
-  // 為特定路由禁用靜態生成
-  onDemandEntries: {
-    maxInactiveAge: 60 * 1000,
-    pagesBufferLength: 5,
+    // 允許內置頁面在運行時動態渲染
+    isrMemoryCacheSize: 0,
   },
 }
 
