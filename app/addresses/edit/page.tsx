@@ -1,8 +1,8 @@
 'use client';
 
 // 強制動態渲染，避免靜態生成錯誤
+// 注意：revalidate 不能在 client 組件中使用
 export const dynamic = 'force-dynamic';
-export const revalidate = 0;
 
 
 
