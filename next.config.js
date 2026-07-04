@@ -15,7 +15,15 @@ const nextConfig = {
   typescript: {
     tsconfigPath: './tsconfig.json',
   },
-
+  // 禁用內置錯誤頁面的預生成
+  experimental: {
+    // 禁用某些頁面的預生成
+  },
+  // 為特定路由禁用靜態生成
+  onDemandEntries: {
+    maxInactiveAge: 60 * 1000,
+    pagesBufferLength: 5,
+  },
 }
 
 module.exports = nextConfig
