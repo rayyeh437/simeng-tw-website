@@ -15,14 +15,18 @@ const nextConfig = {
   typescript: {
     tsconfigPath: './tsconfig.json',
   },
-  // 禁用 ISR 快取以避免預生成問題
-  experimental: {
-    // 允許特殊頁面在運行時動態渲染
-  },
   // 配置 onDemandEntries 以禁用特定路由的預生成
   onDemandEntries: {
     maxInactiveAge: 60 * 1000,
     pagesBufferLength: 5,
+  },
+  // 禁用 ISR 快取以避免預生成問題
+  experimental: {
+    // 允許特殊頁面在運行時動態渲染
+  },
+  // 自定義 webpack 配置以支持 CSS modules
+  webpack: (config) => {
+    return config;
   },
 }
 
