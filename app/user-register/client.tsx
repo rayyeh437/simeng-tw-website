@@ -66,7 +66,7 @@ export function PageClient() {
 
         // 3 秒後重定向到登入頁面
         setTimeout(() => {
-          router.push('/user-login')
+          router.push('/login')
         }, 3000)
       } else {
         setError(result.error || '註冊失敗，請稍後重試')
@@ -314,7 +314,7 @@ export function PageClient() {
         <div style={{ marginTop: '30px', textAlign: 'center', color: '#6B7280', fontSize: '14px' }}>
           <p>
             已有帳戶？{' '}
-            <Link href="/user-login" style={{ color: '#7C3AED', textDecoration: 'none', fontWeight: '600' }}>
+            <Link href="/login" style={{ color: '#7C3AED', textDecoration: 'none', fontWeight: '600' }}>
               立即登入
             </Link>
           </p>

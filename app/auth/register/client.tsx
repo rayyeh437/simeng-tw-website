@@ -37,7 +37,7 @@ export function RegisterClient() {
       if (result.success) {
         // 註冊成功，顯示成功信息並重定向到登入頁面
         alert(`註冊成功！您的會員編號是：${result.memberCode}`)
-        router.push('/auth/login')
+        router.push('/login')
       } else {
         setError(result.error || '註冊失敗，請稍後重試')
       }
@@ -214,7 +214,7 @@ export function RegisterClient() {
       <div style={{ marginTop: '20px', textAlign: 'center', color: '#666' }}>
         <p>
           已有帳戶？{' '}
-          <Link href="/auth/login" style={{ color: '#007bff', textDecoration: 'none' }}>
+          <Link href="/login" style={{ color: '#007bff', textDecoration: 'none' }}>
             立即登入
           </Link>
         </p>

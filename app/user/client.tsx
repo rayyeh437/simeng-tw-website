@@ -30,7 +30,7 @@ export function UserClient() {
   // 重定向未登入用戶
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
-      router.push('/user-login')
+      router.push('/login')
     }
   }, [isAuthenticated, authLoading, router])
 

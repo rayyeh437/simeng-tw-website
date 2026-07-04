@@ -19,7 +19,7 @@ export function PageClient() {
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      router.push('/user-login')
+      router.push('/login')
     }
   }, [isAuthenticated, isLoading, router])
 

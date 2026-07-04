@@ -16,7 +16,7 @@ export function ProtectedRoute({ children, requiredRole = 'user' }: ProtectedRou
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
       // 未登入，重定向到登入頁面
-      router.push('/auth/login')
+      router.push('/login')
     }
   }, [isAuthenticated, isLoading, router])
 

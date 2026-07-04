@@ -16,7 +16,7 @@ export function MainLayout({ children, showHeader = true, showFooter = true }: L
 
   const handleLogout = async () => {
     await logout()
-    router.push('/auth/login')
+    router.push('/login')
   }
 
   return (
@@ -94,7 +94,7 @@ export function MainLayout({ children, showHeader = true, showFooter = true }: L
                     </div>
                   </>
                 ) : (
-                  <Link href="/auth/login" style={{ color: '#7C3AED', textDecoration: 'none', fontWeight: 'bold' }}>
+                  <Link href="/login" style={{ color: '#7C3AED', textDecoration: 'none', fontWeight: 'bold' }}>
                     登入
                   </Link>
                 )}
