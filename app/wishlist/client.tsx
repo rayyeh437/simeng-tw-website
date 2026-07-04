@@ -6,7 +6,6 @@ import { useAuth } from '@/hooks/use-auth'
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 
-
 interface WishlistItem {
   id: string
   productId: number

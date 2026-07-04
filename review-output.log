@@ -1,0 +1,35 @@
+[0;36m═══════════════════════════════════════════════════════════════════════════════[0m
+[0;36m多層次 AI 代碼檢查流程[0m
+[0;36m═══════════════════════════════════════════════════════════════════════════════[0m
+[0;32m✅ 目標目錄: app/[0m
+[0;32m✅ 報告目錄: ai-review-reports-20260704-163258[0m
+
+[0;34m📋 Layer 1: AI AutoFix Platform - 基礎檢查[0m
+[1;33m⚠️  Layer 1 腳本未找到[0m
+
+[0;34m📋 Layer 2: GitHub Copilot - 代碼質量分析[0m
+[0;32m✅ Layer 2 完成[0m
+
+[0;34m📋 Layer 3: Claude - 深度代碼分析[0m
+[1;33m⚠️  Layer 3 跳過 - CLAUDE_API_KEY 未設置[0m
+
+[0;34m📋 Layer 4: 自動代碼清理 (DRY_RUN 模式)[0m
+[0;32m✅ Layer 4 完成 (預覽模式)[0m
+[1;33m⚠️  要應用清理，請運行: bash /home/ubuntu/skills/auto-code-cleanup/scripts/auto-cleanup.sh app/[0m
+
+[0;36m═══════════════════════════════════════════════════════════════════════════════[0m
+[0;36m審查完成[0m
+[0;36m═══════════════════════════════════════════════════════════════════════════════[0m
+[0;32m✅ 所有層級已完成[0m
+[0;32m✅ 報告已保存到: ai-review-reports-20260704-163258[0m
+
+📊 報告文件:
+total 12K
+-rw-r--r-- 1 ubuntu ubuntu 1.3K Jul  4 16:32 layer2-copilot.log
+-rw-r--r-- 1 ubuntu ubuntu 5.4K Jul  4 16:32 layer4-cleanup.log
+
+📝 後續步驟:
+  1. 審查 ai-review-reports-20260704-163258 中的報告
+  2. 根據建議進行代碼改善
+  3. 應用自動清理: bash /home/ubuntu/skills/auto-code-cleanup/scripts/auto-cleanup.sh app/
+  4. 提交並部署

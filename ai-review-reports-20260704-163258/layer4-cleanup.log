@@ -1,0 +1,82 @@
+[0;36m═══════════════════════════════════════════════════════════════════════════════[0m
+[0;36m自動代碼清理[0m
+[0;36m═══════════════════════════════════════════════════════════════════════════════[0m
+[1;33m⚠️  DRY_RUN 模式啟用 - 不會修改文件[0m
+
+[0;34m📋 掃描文件[0m
+[0;35mℹ️  清理 app/admin/categories/page.tsx...[0m
+[0;35mℹ️  清理 app/admin/categories/client.tsx...[0m
+[0;35mℹ️  [app/admin/categories/client.tsx] 將移除 1 個多餘空行[0m
+[0;35mℹ️  清理 app/admin/page.tsx...[0m
+[0;35mℹ️  清理 app/admin/products/page.tsx...[0m
+[0;35mℹ️  清理 app/admin/products/client.tsx...[0m
+[0;35mℹ️  [app/admin/products/client.tsx] 將移除 1 個多餘空行[0m
+[0;35mℹ️  清理 app/admin/orders/page.tsx...[0m
+[0;35mℹ️  清理 app/admin/orders/client.tsx...[0m
+[0;35mℹ️  [app/admin/orders/client.tsx] 將移除 1 個多餘空行[0m
+[0;35mℹ️  清理 app/admin/client.tsx...[0m
+[0;35mℹ️  [app/admin/client.tsx] 將移除 1 個多餘空行[0m
+[0;35mℹ️  清理 app/api/proxy/route.ts...[0m
+[0;35mℹ️  清理 app/auth/login/page.tsx...[0m
+[0;35mℹ️  清理 app/auth/login/client.tsx...[0m
+[0;35mℹ️  [app/auth/login/client.tsx] 將移除 1 個多餘空行[0m
+[0;35mℹ️  清理 app/auth/register/page.tsx...[0m
+[0;35mℹ️  清理 app/auth/register/client.tsx...[0m
+[0;35mℹ️  [app/auth/register/client.tsx] 將移除 1 個多餘空行[0m
+[0;35mℹ️  清理 app/cart/page.tsx...[0m
+[0;35mℹ️  清理 app/cart/client.tsx...[0m
+[0;35mℹ️  [app/cart/client.tsx] 將移除 1 個多餘空行[0m
+[0;35mℹ️  清理 app/layout.tsx...[0m
+[0;35mℹ️  清理 app/notifications/page.tsx...[0m
+[0;35mℹ️  清理 app/notifications/client.tsx...[0m
+[0;35mℹ️  [app/notifications/client.tsx] 將移除 1 個多餘空行[0m
+[0;35mℹ️  清理 app/orders/[id]/page.tsx...[0m
+[0;35mℹ️  清理 app/orders/[id]/client.tsx...[0m
+[0;35mℹ️  [app/orders/[id]/client.tsx] 將移除 1 個多餘空行[0m
+[0;35mℹ️  清理 app/orders/page.tsx...[0m
+[0;35mℹ️  清理 app/orders/client.tsx...[0m
+[0;35mℹ️  [app/orders/client.tsx] 將移除 1 個多餘空行[0m
+[0;35mℹ️  清理 app/page.tsx...[0m
+[0;35mℹ️  清理 app/products/[id]/page.tsx...[0m
+[0;35mℹ️  清理 app/products/[id]/client.tsx...[0m
+[0;35mℹ️  [app/products/[id]/client.tsx] 將移除 1 個多餘空行[0m
+[0;35mℹ️  清理 app/products/page.tsx...[0m
+[0;35mℹ️  清理 app/products/client.tsx...[0m
+[0;35mℹ️  [app/products/client.tsx] 將移除 1 個多餘空行[0m
+[0;35mℹ️  清理 app/profile/page.tsx...[0m
+[0;35mℹ️  清理 app/profile/client.tsx...[0m
+[0;35mℹ️  [app/profile/client.tsx] 將移除 1 個多餘空行[0m
+[0;35mℹ️  清理 app/wishlist/page.tsx...[0m
+[0;35mℹ️  清理 app/wishlist/client.tsx...[0m
+[0;35mℹ️  [app/wishlist/client.tsx] 將移除 1 個多餘空行[0m
+[0;35mℹ️  清理 app/user-login/page.tsx...[0m
+[0;35mℹ️  清理 app/user-login/client.tsx...[0m
+[0;35mℹ️  [app/user-login/client.tsx] 將移除 1 個多餘空行[0m
+[0;35mℹ️  清理 app/user-register/page.tsx...[0m
+[0;35mℹ️  清理 app/user-register/client.tsx...[0m
+[0;35mℹ️  [app/user-register/client.tsx] 將移除 1 個多餘空行[0m
+[0;35mℹ️  清理 app/addresses/page.tsx...[0m
+[0;35mℹ️  清理 app/addresses/edit/page.tsx...[0m
+[0;35mℹ️  清理 app/addresses/edit/client.tsx...[0m
+[0;35mℹ️  [app/addresses/edit/client.tsx] 將移除 1 個多餘空行[0m
+[0;35mℹ️  清理 app/addresses/client.tsx...[0m
+[0;35mℹ️  [app/addresses/client.tsx] 將移除 1 個多餘空行[0m
+[0;35mℹ️  清理 app/checkout/page.tsx...[0m
+[0;35mℹ️  清理 app/checkout/client.tsx...[0m
+[0;35mℹ️  [app/checkout/client.tsx] 將移除 1 個多餘空行[0m
+[0;35mℹ️  清理 app/user/page.tsx...[0m
+[0;35mℹ️  清理 app/user/client.tsx...[0m
+[0;35mℹ️  [app/user/client.tsx] 將移除 1 個多餘空行[0m
+[0;35mℹ️  清理 app/error.tsx...[0m
+[0;35mℹ️  清理 app/not-found.tsx...[0m
+[0;35mℹ️  清理 app/client.tsx...[0m
+[0;35mℹ️  [app/client.tsx] 將移除 1 個多餘空行[0m
+[0;35mℹ️  清理 app/login/client.tsx...[0m
+[0;35mℹ️  [app/login/client.tsx] 將移除 1 個多餘空行[0m
+[0;35mℹ️  清理 app/login/page.tsx...[0m
+[0;35mℹ️  已清理 48 個文件[0m
+[0;36m═══════════════════════════════════════════════════════════════════════════════[0m
+[0;36m清理完成[0m
+[0;36m═══════════════════════════════════════════════════════════════════════════════[0m
+[0;32m✅ DRY_RUN 完成 - 無文件被修改[0m
+[0;35mℹ️  要實際執行清理，請運行: DRY_RUN=false bash scripts/auto-cleanup.sh[0m

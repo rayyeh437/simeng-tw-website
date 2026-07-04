@@ -5,7 +5,6 @@ import { ProtectedRoute } from '@/components/protected-route'
 import { getCategories, searchProducts } from '@/lib/api'
 import { useState, useEffect } from 'react'
 
-
 function ProductsContent() {
   const [products, setProducts] = useState<Product[]>([])
   const [categories, setCategories] = useState<Category[]>([])

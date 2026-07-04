@@ -6,7 +6,6 @@ import { useAuth } from '@/hooks/use-auth'
 import { useParams, useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 
-
 type OrderStatus = 'pending' | 'confirmed' | 'shipped' | 'delivered' | 'cancelled'
 type PaymentStatus = 'awaiting_payment' | 'payment_submitted' | 'payment_verified' | 'payment_rejected'
 

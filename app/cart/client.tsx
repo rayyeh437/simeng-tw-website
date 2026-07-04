@@ -6,7 +6,6 @@ import { useAuth } from '@/hooks/use-auth'
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 
-
 interface CartItem {
   id: string
   productId: number

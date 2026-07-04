@@ -6,7 +6,6 @@ import { useAuth } from '@/hooks/use-auth'
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 
-
 interface Order {
   id: number
   userId: number

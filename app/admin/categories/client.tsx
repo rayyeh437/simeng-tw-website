@@ -5,7 +5,6 @@ import { ProtectedRoute } from '@/components/protected-route'
 import { getCategories } from '@/lib/api'
 import { useState, useEffect } from 'react'
 
-
 function CategoriesContent() {
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)

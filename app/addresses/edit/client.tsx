@@ -6,7 +6,6 @@ import { useAuth } from '@/hooks/use-auth'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useState, useEffect } from 'react'
 
-
 // 台灣地址數據
 const taiwanAddresses: Record<string, string[]> = {
   '台北市': ['中正區', '大同區', '中山區', '松山區', '大安區', '文山區', '南港區', '內湖區', '士林區', '北投區'],

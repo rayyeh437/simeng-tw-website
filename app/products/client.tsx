@@ -5,7 +5,6 @@ import { MainLayout } from '@/components/layout'
 import { searchProducts, getCategories } from '@/lib/api'
 import { useState, useEffect } from 'react'
 
-
 export function ProductsClient() {
   const [products, setProducts] = useState<Product[]>([])
   const [categories, setCategories] = useState<Category[]>([])

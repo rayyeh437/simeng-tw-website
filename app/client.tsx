@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { MainLayout } from '@/components/layout'
 import { useState, useEffect } from 'react'
 
-
 const CATEGORIES = [
   { id: 'all', name: '全部商品', icon: '📦' },
   { id: 'new', name: '新品上市', icon: '✨' },

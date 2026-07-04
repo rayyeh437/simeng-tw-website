@@ -4,7 +4,6 @@ import { registerUser } from '@/lib/auth-api'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
-
 export function RegisterClient() {
   const router = useRouter()
   const [email, setEmail] = useState('')

@@ -5,7 +5,6 @@ import { useAuth } from '@/hooks/use-auth'
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 
-
 export function PageClient() {
   const { user, isAuthenticated, isLoading, logout } = useAuth()
   const router = useRouter()

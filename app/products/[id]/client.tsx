@@ -4,7 +4,6 @@ import { MainLayout } from '@/components/layout'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
 
-
 const PRODUCTS_DATA: Record<string, any> = {
   '1': {
     id: '1',
