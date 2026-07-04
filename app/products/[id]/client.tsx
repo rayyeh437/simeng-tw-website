@@ -1,12 +1,9 @@
-'use client';
-
-
-
-
-import { useState } from 'react'
-import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import { MainLayout } from '@/components/layout'
+import { useParams } from 'next/navigation'
+import { useState } from 'react'
+'use client';
+
 
 const PRODUCTS_DATA: Record<string, any> = {
   '1': {

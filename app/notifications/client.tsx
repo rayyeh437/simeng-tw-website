@@ -1,12 +1,9 @@
-'use client';
-
-
-
-
-import { useState, useEffect } from 'react'
 import { MainLayout } from '@/components/layout'
 import { useAuth } from '@/hooks/use-auth'
 import { useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react'
+'use client';
+
 
 interface Notification {
   id: number

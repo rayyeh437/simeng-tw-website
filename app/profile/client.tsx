@@ -1,13 +1,10 @@
-'use client';
-
-
-
-
-import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { MainLayout } from '@/components/layout'
 import { useAuth } from '@/hooks/use-auth'
 import { useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react'
+'use client';
+
 
 export function PageClient() {
   const { user, isAuthenticated, isLoading, logout } = useAuth()

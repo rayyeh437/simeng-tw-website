@@ -1,12 +1,9 @@
-'use client';
-
-
-
-
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { registerUser } from '@/lib/auth-api'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+'use client';
+
 
 export function RegisterClient() {
   const router = useRouter()
@@ -36,7 +33,7 @@ export function RegisterClient() {
 
     try {
       const result = await registerUser(email, password, name)
-      
+
       if (result.success) {
         // 註冊成功，顯示成功信息並重定向到登入頁面
         alert(`註冊成功！您的會員編號是：${result.memberCode}`)

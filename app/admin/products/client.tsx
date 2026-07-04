@@ -1,13 +1,10 @@
+import Link from 'next/link'
+import type { Product, Category } from '@/lib/types'
+import { ProtectedRoute } from '@/components/protected-route'
+import { getCategories, searchProducts } from '@/lib/api'
+import { useState, useEffect } from 'react'
 'use client';
 
-
-
-
-import { useState, useEffect } from 'react'
-import Link from 'next/link'
-import { getCategories, searchProducts } from '@/lib/api'
-import { ProtectedRoute } from '@/components/protected-route'
-import type { Product, Category } from '@/lib/types'
 
 function ProductsContent() {
   const [products, setProducts] = useState<Product[]>([])
@@ -73,7 +70,7 @@ function ProductsContent() {
           </button>
         </Link>
       </div>
-      
+
       <div style={{ marginBottom: '20px' }}>
         <button
           style={{

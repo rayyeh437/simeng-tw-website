@@ -37,6 +37,8 @@ export async function GET(request: Request) {
       );
     }
 
+    console.log("[ProxyAPI] GET 請求:", targetUrl);
+
     const agent = createProxyAgent();
     const fetchOptions: any = {
       method: "GET",
@@ -47,6 +49,7 @@ export async function GET(request: Request) {
 
     // 如果配置了代理，使用代理發送請求
     if (agent) {
+      console.log("[ProxyAPI] 使用 Fixie 代理發送請求");
       fetchOptions.agent = agent;
     }
 
@@ -84,6 +87,8 @@ export async function POST(request: Request) {
       );
     }
 
+    console.log("[ProxyAPI] POST 請求:", targetUrl);
+
     const body = await request.json();
     const agent = createProxyAgent();
 
@@ -97,6 +102,7 @@ export async function POST(request: Request) {
 
     // 如果配置了代理，使用代理發送請求
     if (agent) {
+      console.log("[ProxyAPI] 使用 Fixie 代理發送請求");
       fetchOptions.agent = agent;
     }
 

@@ -1,8 +1,11 @@
-import Link from 'next/link'
-import { MainLayout } from '@/components/layout'
-import { useState, useEffect } from 'react'
 'use client';
 
+
+
+
+import { useState, useEffect } from 'react'
+import Link from 'next/link'
+import { MainLayout } from '@/components/layout'
 
 const CATEGORIES = [
   { id: 'all', name: '全部商品', icon: '📦' },
@@ -78,6 +81,8 @@ export function AppClient() {
 
   return (
     <MainLayout>
+
+
 
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
         {/* 標語 */}

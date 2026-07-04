@@ -1,13 +1,10 @@
+import Link from 'next/link'
+import type { Category } from '@/lib/types'
+import { ProtectedRoute } from '@/components/protected-route'
+import { getCategories } from '@/lib/api'
+import { useState, useEffect } from 'react'
 'use client';
 
-
-
-
-import { useState, useEffect } from 'react'
-import Link from 'next/link'
-import { getCategories } from '@/lib/api'
-import { ProtectedRoute } from '@/components/protected-route'
-import type { Category } from '@/lib/types'
 
 function CategoriesContent() {
   const [categories, setCategories] = useState<Category[]>([])
@@ -66,7 +63,7 @@ function CategoriesContent() {
           </button>
         </Link>
       </div>
-      
+
       <div style={{ marginBottom: '20px' }}>
         <button
           style={{

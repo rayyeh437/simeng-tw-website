@@ -1,13 +1,10 @@
-'use client';
-
-
-
-
-import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import type { Product, Category } from '@/lib/types'
 import { MainLayout } from '@/components/layout'
 import { searchProducts, getCategories } from '@/lib/api'
-import type { Product, Category } from '@/lib/types'
+import { useState, useEffect } from 'react'
+'use client';
+
 
 export function ProductsClient() {
   const [products, setProducts] = useState<Product[]>([])

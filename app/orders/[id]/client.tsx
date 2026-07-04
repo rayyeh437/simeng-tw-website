@@ -1,14 +1,11 @@
-'use client';
-
-
-
-
-import { useState, useEffect } from 'react'
-import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { MainLayout } from '@/components/layout'
-import { useAuth } from '@/hooks/use-auth'
 import { trpc } from '@/lib/trpc'
+import { useAuth } from '@/hooks/use-auth'
+import { useParams, useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react'
+'use client';
+
 
 type OrderStatus = 'pending' | 'confirmed' | 'shipped' | 'delivered' | 'cancelled'
 type PaymentStatus = 'awaiting_payment' | 'payment_submitted' | 'payment_verified' | 'payment_rejected'

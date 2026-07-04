@@ -1,3 +1,4 @@
+import { PageClient } from './client'
 import { Suspense } from 'react'
 
 export const dynamic = 'force-dynamic'
@@ -9,7 +10,6 @@ function LoadingUI() {
     </div>
   )
 }
-import { PageClient } from './client'
 
 export default function Page() {
   return (

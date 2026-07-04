@@ -1,6 +1,6 @@
-import './globals.css'
 import type { Metadata } from 'next'
 import { Providers } from '@/lib/providers'
+import './globals.css'
 
 const appName = process.env.NEXT_PUBLIC_APP_NAME || '喜萌'
 

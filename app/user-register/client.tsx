@@ -1,14 +1,11 @@
+import Link from 'next/link'
+import { MainLayout } from '@/components/layout'
+import { registerUser } from '@/lib/auth-api'
+import { useAuth } from '@/hooks/use-auth'
+import { useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react'
 'use client';
 
-
-
-
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import { registerUser } from '@/lib/auth-api'
-import { MainLayout } from '@/components/layout'
-import { useAuth } from '@/hooks/use-auth'
 
 export function PageClient() {
   const router = useRouter()
@@ -66,7 +63,7 @@ export function PageClient() {
         // 註冊成功
         setSuccess(`✅ 註冊成功！您的會員編號是：${result.memberCode}`)
         setMemberCode(result.memberCode || '')
-        
+
         // 3 秒後重定向到登入頁面
         setTimeout(() => {
           router.push('/user-login')

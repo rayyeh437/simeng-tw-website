@@ -1,12 +1,9 @@
-'use client';
-
-
-
-
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { loginUser } from '@/lib/auth-api'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+'use client';
+
 
 export function LoginClient() {
   const router = useRouter()
@@ -22,7 +19,7 @@ export function LoginClient() {
 
     try {
       const result = await loginUser(email, password)
-      
+
       if (result.success) {
         // 登入成功，重定向到後台
         router.push('/admin')

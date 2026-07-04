@@ -1,5 +1,5 @@
-import { Suspense } from 'react'
 import { AddressEditClient } from './client'
+import { Suspense } from 'react'
 
 // 強制動態渲染，避免靜態生成
 export const dynamic = 'force-dynamic'

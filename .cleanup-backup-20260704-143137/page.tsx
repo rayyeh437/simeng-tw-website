@@ -1,4 +1,3 @@
-import { NotificationsClient } from './client'
 import { Suspense } from 'react'
 
 export const dynamic = 'force-dynamic'
@@ -10,11 +9,12 @@ function LoadingUI() {
     </div>
   )
 }
+import { UserClient } from './client'
 
 export default function Page() {
   return (
     <Suspense fallback={<LoadingUI />}>
-      <NotificationsClient />
+      <UserClient />
     </Suspense>
   )
 }

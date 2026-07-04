@@ -1,11 +1,11 @@
-'use client';
-
-import { useState, useEffect } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { MainLayout } from '@/components/layout'
-import { useAuth } from '@/hooks/use-auth'
 import { trpc } from '@/lib/trpc'
+import { useAuth } from '@/hooks/use-auth'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useState, useEffect } from 'react'
+'use client';
+
 
 // 台灣地址數據
 const taiwanAddresses: Record<string, string[]> = {
