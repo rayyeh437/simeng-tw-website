@@ -108,8 +108,8 @@ export async function loginUser(email: string, password: string): Promise<LoginR
 
     const data = await response.json();
     
-    // tRPC 返回格式: { result: { data: {...} } }
-    const result = (data as any)?.result?.data;
+    // tRPC 返回格式: { result: { data: { json: {...} } } }
+    const result = (data as any)?.result?.data?.json;
     
     if (result?.success && result?.user) {
       // 後端現在返回 sessionToken
@@ -173,8 +173,8 @@ export async function registerUser(
 
     const data = await response.json();
     
-    // tRPC 返回格式: { result: { data: {...} } }
-    const result = (data as any)?.result?.data;
+    // tRPC 返回格式: { result: { data: { json: {...} } } }
+    const result = (data as any)?.result?.data?.json;
     
     if (result?.success) {
       return {
@@ -230,8 +230,8 @@ export async function getCurrentUser(): Promise<User | null> {
 
     const data = await response.json();
     
-    // tRPC 返回格式: { result: { data: { user: {...} } } }
-    const result = (data as any)?.result?.data;
+    // tRPC 返回格式: { result: { data: { json: { user: {...} } } } }
+    const result = (data as any)?.result?.data?.json;
     const user = result?.user;
     
     if (user?.id) {
@@ -275,7 +275,14 @@ export async function logoutUser(): Promise<boolean> {
     // 無論 API 是否成功，都清除本地數據
     clearAuthData();
     
-    return response.ok;
+    if (!response.ok) {
+      return false;
+    }
+    
+    const data = await response.json();
+    const result = (data as any)?.result?.data?.json;
+    
+    return result?.success !== false;
   } catch (error) {
     // 即使出錯也清除本地數據
     clearAuthData();
@@ -318,7 +325,7 @@ export async function sendOtpCode(mobile: string): Promise<{ success: boolean; e
     }
 
     const data = await response.json();
-    const result = (data as any)?.result?.data;
+    const result = (data as any)?.result?.data?.json;
     
     return {
       success: result?.success || true,
@@ -368,7 +375,7 @@ export async function verifyOtpCode(mobile: string, code: string): Promise<{ suc
     }
 
     const data = await response.json();
-    const result = (data as any)?.result?.data;
+    const result = (data as any)?.result?.data?.json;
     
     return {
       success: result?.success || true,
